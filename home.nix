@@ -39,6 +39,7 @@ in
     pkgs.age
     pkgs.sops
     pkgs.claude-code
+    pkgs.delta
     showAgeKey
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
@@ -115,6 +116,95 @@ in
     enable = true;
     shellAliases = {
       cd = "z";
+    };
+  };
+
+  programs.gpg = {
+    enable = true;
+    # Home-manager will manage your GPG configuration
+    # Keys are stored in ~/.gnupg/
+  };
+
+  # Enable GPG agent for key management and caching passphrases
+  services.gpg-agent = {
+    enable = true;
+    defaultCacheTtl = 3600;
+    maxCacheTtl = 28800;
+    enableSshSupport = false;
+    # Options: curses (terminal), gtk2, qt, gnome3
+    pinentry.package = pkgs.pinentry-curses;
+  };
+
+  programs.git = {
+    enable = true;
+
+    signing.key = "2A0AF30A3BD43ABB";
+
+    settings = {
+      user = {
+        name = "jackschu";
+        email = "31808950+jackschu@users.noreply.github.com";
+      };
+
+      commit = {
+        gpgsign = true;
+      };
+
+      init = {
+        defaultBranch = "main";
+      };
+
+      push = {
+        autoSetupRemote = true;
+      };
+
+      merge = {
+        conflictStyle = "diff3";
+      };
+
+      core = {
+        pager = "delta";
+        editor = "emacs -nw --no-desktop";
+      };
+
+      interactive = {
+        diffFilter = "delta --color-only";
+      };
+
+      delta = {
+        side-by-side = true;
+        navigate = true;
+
+        line-numbers = true;
+
+        light = false;
+      };
+
+      diff = {
+        colorMoved = "default";
+      };
+
+      color = {
+        ui = true;
+      };
+
+      alias = {
+        check = "checkout";
+        unshelve = "stash apply";
+        shelve = "stash";
+        revert = "checkout";
+        branches = "branch -a --sort=-committerdate";
+      };
+
+      # GitHub credential helper using gh CLI
+      credential = {
+        "https://github.com" = {
+          helper = "!/etc/profiles/per-user/devbox/bin/gh auth git-credential";
+        };
+        "https://gist.github.com" = {
+          helper = "!/etc/profiles/per-user/devbox/bin/gh auth git-credential";
+        };
+      };
     };
   };
 }
