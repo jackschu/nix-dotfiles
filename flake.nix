@@ -8,9 +8,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-code.url = "github:sadjow/claude-code-nix";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, claude-code, ... }:
+  outputs = { nixpkgs, home-manager, claude-code, sops-nix, ... }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -24,6 +28,7 @@
         inherit pkgs;
 
         modules = [
+          sops-nix.homeManagerModules.sops
           ./home.nix
         ];
       };

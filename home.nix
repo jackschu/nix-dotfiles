@@ -8,11 +8,27 @@ let
   sopsAgeRelPath = "sops/age";
   ageKeyDir = "${config.xdg.configHome}/${sopsAgeRelPath}";
   ageKeyFile = "${ageKeyDir}/keys.txt";
+
+  # Age public keys for all devices that can decrypt secrets
+  # Add new devices here and run 'home-manager switch' to update the sops-edit wrapper
+  ageKeys = {
+    devbox = "age12x8hm7w8nns7w7z2ufsfz4ey9yyklatv3pfu508va4ej5hxq3dcsydq9as";
+    # laptop = "age1...";  # Add more devices here
+  };
+
+  # Comma-separated list of age public keys for sops --age flag
+  ageRecipients = lib.concatStringsSep "," (lib.attrValues ageKeys);
+
+  # Wrapper for sops that bakes in the age keys - no .sops.yaml needed
+  sopsEdit = pkgs.writeShellScriptBin "sops-edit" ''
+    export SOPS_AGE_KEY_FILE="${ageKeyFile}"
+    exec ${pkgs.sops}/bin/sops --age "${ageRecipients}" "$@"
+  '';
+
   showAgeKey = pkgs.writeShellScriptBin "show-age-pubkey" ''
     if [ -f "${ageKeyFile}" ]; then
       ${pkgs.gnused}/bin/sed -n 's/.*public key: \(.*\)/\1/p' "${ageKeyFile}"
     else
-
       echo "No age key found. Run 'home-manager switch' first." >&2
       exit 1
     fi
@@ -41,6 +57,7 @@ in
     pkgs.claude-code
     pkgs.delta
     showAgeKey
+    sopsEdit
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -104,6 +121,26 @@ in
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  # sops-nix configuration for secrets management
+  sops = {
+    age.keyFile = ageKeyFile;
+    defaultSopsFile = ./secrets/secrets.yaml;
+
+    secrets."github-gpg-key" = { };
+  };
+
+  # Import GPG key from sops secret after decryption
+  home.activation.importGpgKey = lib.hm.dag.entryAfter [ "sops-nix" ] ''
+    GPG_KEY_FILE="${config.sops.secrets."github-gpg-key".path}"
+    if [ -f "$GPG_KEY_FILE" ]; then
+      # Check if key is already imported by looking for the signing key
+      if ! ${pkgs.gnupg}/bin/gpg --list-secret-keys "${config.programs.git.signing.key}" &>/dev/null; then
+        run ${pkgs.gnupg}/bin/gpg --batch --import "$GPG_KEY_FILE"
+        echo "GPG key imported successfully"
+      fi
+    fi
+  '';
   programs.atuin = {
     enable = true;
     enableBashIntegration = true;
