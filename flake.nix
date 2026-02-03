@@ -14,7 +14,14 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, claude-code, sops-nix, ... }:
+  outputs =
+    {
+      nixpkgs,
+      home-manager,
+      claude-code,
+      sops-nix,
+      ...
+    }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
