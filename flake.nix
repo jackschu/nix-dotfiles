@@ -22,15 +22,20 @@
         config.allowUnfree = true;
         overlays = [ claude-code.overlays.default ];
       };
+      baseModules = [
+        sops-nix.homeManagerModules.sops
+        ./home.nix
+      ];
     in
     {
-      homeConfigurations."devbox" = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."laptop" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
+        modules = baseModules ++ [ ./laptop.nix ];
+      };
 
-        modules = [
-          sops-nix.homeManagerModules.sops
-          ./home.nix
-        ];
+      homeConfigurations."desktop" = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = baseModules;
       };
     };
 }
