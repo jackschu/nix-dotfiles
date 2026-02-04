@@ -7,17 +7,24 @@ let
   ageKeyFile = "${ageKeyDir}/keys.txt";
 
   # Age public keys for all devices that can decrypt secrets
-  # Add new devices here and run 'home-manager switch' to update the sops-edit wrapper
+  # Add new devices here and run 'home-manager switch' to update the sops config
   ageKeys = {
     devbox = "age12x8hm7w8nns7w7z2ufsfz4ey9yyklatv3pfu508va4ej5hxq3dcsydq9as";
     desktop = "age192ar45qk70f7jh2wa4457lx03ddcfntjtg9l376gra2mrmt3za2qp9ye9a";
   };
 
-  ageRecipients = lib.concatStringsSep "," (lib.attrValues ageKeys);
+  yaml = pkgs.formats.yaml { };
+
+  sopsConfig = yaml.generate ".sops.yaml" {
+    creation_rules = [{
+      age = lib.concatStringsSep "," (lib.attrValues ageKeys);
+    }];
+  };
 
   sopsEdit = pkgs.writeShellScriptBin "sops-edit" ''
     export SOPS_AGE_KEY_FILE="${ageKeyFile}"
-    exec ${pkgs.sops}/bin/sops --age "${ageRecipients}" "$@"
+    export SOPS_CONFIG="${sopsConfig}"
+    exec ${pkgs.sops}/bin/sops "$@"
   '';
 
   showAgeKey = pkgs.writeShellScriptBin "show-age-pubkey" ''
@@ -31,7 +38,7 @@ let
 
   sopsRekey = pkgs.writeShellScriptBin "sops-rekey" ''
     export SOPS_AGE_KEY_FILE="${ageKeyFile}"
-    exec ${pkgs.sops}/bin/sops --rotate --in-place --age "${ageRecipients}" "$@"
+    exec ${pkgs.sops}/bin/sops --config ${sopsConfig} updatekeys "$@"
   '';
 in
 {
