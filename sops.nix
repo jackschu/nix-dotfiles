@@ -28,6 +28,11 @@ let
       exit 1
     fi
   '';
+
+  sopsRekey = pkgs.writeShellScriptBin "sops-rekey" ''
+    export SOPS_AGE_KEY_FILE="${ageKeyFile}"
+    exec ${pkgs.sops}/bin/sops --rotate --in-place --age "${ageRecipients}" "$@"
+  '';
 in
 {
   home.packages = [
@@ -35,6 +40,7 @@ in
     pkgs.sops
     showAgeKey
     sopsEdit
+    sopsRekey
   ];
 
   # Ensure the age key directory exists

@@ -19,9 +19,9 @@ Add a new entry to `homeConfigurations` in `flake.nix` and create a correspondin
    ```
 2. Copy the public key from the output
 3. Add the public key to `ageKeys` in `sops.nix` (the attr name is just for your reference)
-4. On a device that can already decrypt, run:
+4. On a device that can already decrypt, re-encrypt for all keys:
    ```bash
-   sops-edit secrets/secrets.yaml  # opens, re-saves with new key
+   sops-rekey secrets/secrets.yaml
    ```
 5. Commit and push
 6. On the new device: pull and run `nix run home-manager -- switch --flake "~/.config/home-manager#<machine>"`
