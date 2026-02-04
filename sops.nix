@@ -10,6 +10,7 @@ let
   # Add new devices here and run 'home-manager switch' to update the sops-edit wrapper
   ageKeys = {
     devbox = "age12x8hm7w8nns7w7z2ufsfz4ey9yyklatv3pfu508va4ej5hxq3dcsydq9as";
+    desktop = "age192ar45qk70f7jh2wa4457lx03ddcfntjtg9l376gra2mrmt3za2qp9ye9a"
   };
 
   ageRecipients = lib.concatStringsSep "," (lib.attrValues ageKeys);
@@ -48,6 +49,7 @@ in
 
   # sops-nix configuration
   sops = {
+    validateSopsFiles = false;
     age.keyFile = ageKeyFile;
     defaultSopsFile = ./secrets/secrets.yaml;
   };

@@ -42,7 +42,7 @@
 
       homeConfigurations."desktop" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        modules = baseModules;
+        modules = baseModules ++ [ ./desktop.nix ];
       };
     };
 }

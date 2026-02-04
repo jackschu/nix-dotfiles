@@ -1,6 +1,9 @@
 { pkgs, ... }:
 
 {
+  home.username = "devbox";
+  home.homeDirectory = "/home/devbox";
+
   services.easyeffects = {
     enable = true;
     preset = "thinkpad-unsuck";
