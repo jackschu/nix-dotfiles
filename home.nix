@@ -5,11 +5,15 @@
   ...
 }:
 
+let
+  browser = "google-chrome.desktop";
+in
 {
   imports = [
     ./sops.nix
     ./gpg.nix
     ./git.nix
+    ./plasma.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -28,6 +32,8 @@
 
   home.packages = [
     pkgs.claude-code
+    pkgs.kdePackages.kdbusaddons
+    pkgs.ripgrep
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -44,6 +50,25 @@
     #   org.gradle.daemon.idletimeout=3600000
     # '';
   };
+
+  # Reduce Bluetooth audio latency (default is ~200ms buffer)
+  xdg.configFile."wireplumber/wireplumber.conf.d/51-bluetooth-latency.conf".text = ''
+    monitor.bluez.rules = [
+      {
+        matches = [
+          {
+            node.name = "~bluez_output.*"
+          }
+        ]
+        actions = {
+          update-props = {
+            # Reduce buffer to ~50ms (in microseconds)
+            api.bluez5.a2dp.latency.msec = 50
+          }
+        }
+      }
+    ]
+  '';
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. These will be explicitly sourced when using a
@@ -84,4 +109,25 @@
       cd = "z";
     };
   };
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = browser;
+      "application/xhtml+xml" = browser;
+      "x-scheme-handler/http" = browser;
+      "x-scheme-handler/https" = browser;
+      "x-scheme-handler/about" = browser;
+      "x-scheme-handler/unknown" = browser;
+    };
+  };
+
+  programs.chromium = {
+    enable = true;
+    package = pkgs.google-chrome;
+    commandLineArgs = [
+      "--enable-features=TouchpadOverscrollHistoryNavigation"
+    ];
+  };
+
 }
