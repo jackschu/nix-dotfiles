@@ -10,6 +10,70 @@
       {
         location = "bottom";
         hiding = "autohide";
+        widgets = [
+          "org.kde.plasma.kickoff"
+          {
+            iconTasks = {
+              launchers = [
+                "applications:xfce4-terminal.desktop"
+                "applications:google-chrome.desktop"
+                "applications:discord.desktop"
+                "applications:spotify.desktop"
+              ];
+              behavior.minimizeActiveTaskOnClick = false;
+            };
+          }
+          "org.kde.plasma.panelspacer"
+          {
+            systemTray = {
+              items = {
+                shown = [
+                  "org.kde.plasma.networkmanagement"
+                  "org.kde.plasma.bluetooth"
+                  "org.kde.plasma.battery"
+                  "org.kde.plasma.volume"
+                ];
+              };
+            };
+          }
+          "org.kde.plasma.digitalclock"
+          "org.kde.plasma.showdesktop"
+        ];
+      }
+      {
+        location = "top";
+        height = 26;
+        hiding = "none";
+        widgets = [
+          "org.kde.plasma.panelspacer"
+          {
+            systemMonitor = {
+              displayStyle = "org.kde.ksysguard.textonly";
+              sensors = [
+                { name = "cpu/all/usage"; color = "180,190,254"; label = "CPU"; }
+                { name = "memory/physical/usedPercent"; color = "245,194,231"; label = "RAM"; }
+              ];
+            };
+          }
+          {
+            systemTray = {
+              items = {
+                shown = [
+                  "org.kde.plasma.networkmanagement"
+                  "org.kde.plasma.bluetooth"
+                  "org.kde.plasma.battery"
+                ];
+                hidden = [
+                  "org.kde.plasma.notifications"
+                  "org.kde.plasma.volume"
+                  "org.kde.plasma.brightness"
+                  "org.kde.plasma.clipboard"
+                ];
+              };
+            };
+          }
+          "org.kde.plasma.digitalclock"
+        ];
       }
     ];
     configFile = {
@@ -51,7 +115,10 @@
       };
       klipperrc = {
         General = {
-          SyncClipboards = true;  # Sync PRIMARY and CLIPBOARD selections
+          SyncClipboards = false;  # Keep PRIMARY and CLIPBOARD separate (GNOME-like behavior)
+          IgnoreSelection = true;  # Don't track PRIMARY (text highlight) in clipboard history
+          KeepClipboardContents = false;  # Don't persist clipboard contents
+          MaxClipItems = 1;  # Only keep current item (disables history)
         };
       };
       kglobalshortcutsrc = {

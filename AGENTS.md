@@ -24,12 +24,19 @@ nix run github:nix-community/rc2nix <config-file>
 
 This tool helps translate imperative configuration files into declarative Nix syntax that can be managed through home-manager.
 
-## Commands
+## Applying Changes
+
+After making configuration changes, apply them by determining the correct profile and running:
 
 ```bash
-# Apply home-manager config (run from ~/.config/home-manager)
-home-manager switch --flake .#laptop   # or .#desktop
+home-manager switch --flake .#<profile>
+```
 
+To determine `<profile>`, check the hostname (`hostnamectl` or `cat /etc/hostname`). Use `laptop` if the hostname contains "laptop" or "thinkpad", otherwise use `desktop`.
+
+## Other Commands
+
+```bash
 # Update flake inputs
 nix flake update
 

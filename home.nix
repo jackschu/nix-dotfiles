@@ -34,6 +34,7 @@ in
     pkgs.claude-code
     pkgs.kdePackages.kdbusaddons
     pkgs.ripgrep
+    pkgs.wl-clipboard
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -107,7 +108,7 @@ in
     enable = true;
     shellAliases = {
       cd = "z";
-    };
+};
   };
 
   xdg.mimeApps = {
