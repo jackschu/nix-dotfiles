@@ -30,12 +30,22 @@ in
   # release notes.
   home.stateVersion = "25.11"; # Please read the comment before changing.
 
-  home.packages = [
-    pkgs.claude-code
-    pkgs.kdePackages.kdbusaddons
-    pkgs.ripgrep
-    pkgs.wl-clipboard
+  home.packages = with pkgs; [
+    claude-code
+    ripgrep tree wl-clipboard
+
+    kdePackages.kdbusaddons
+
+    
+    # General fonts
+    inter
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-color-emoji
+
+    nerd-fonts.jetbrains-mono
   ];
+  fonts.fontconfig.enable = true;
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -88,7 +98,7 @@ in
   #  /etc/profiles/per-user/devbox/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    # EDITOR = "emacs";
+    EDITOR = "emacs --no-desktop";
   };
 
   # Let Home Manager install and manage itself.
