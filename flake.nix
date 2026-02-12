@@ -51,5 +51,13 @@
         inherit pkgs;
         modules = baseModules ++ [ ./desktop.nix ];
       };
+
+      nixosConfigurations."dev_thinkpad" = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          ./nixos/configuration.nix
+          ./nixos/dev_thinkpad
+        ];
+      };
     };
 }

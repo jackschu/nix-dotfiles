@@ -2,14 +2,15 @@
 
 ## Overview
 
-This is a flake-based home-manager configuration for NixOS. Home-manager manages user-level packages and dotfiles declaratively.
+This is a flake-based NixOS and home-manager configuration. The flake manages both system-level NixOS configurations and user-level home-manager configurations declaratively.
 
 ## Structure
 
-- `flake.nix` - Flake inputs and home configurations
+- `flake.nix` - Flake inputs, home configurations, and NixOS system configurations
 - `home.nix` - Shared configuration for all machines
 - `laptop.nix` / `desktop.nix` - Machine-specific overrides (username, home directory, hardware-specific settings)
 - `git.nix`, `gpg.nix`, `sops.nix` - Modular configurations imported by home.nix
+- `nixos/` - NixOS system configurations (per-machine in subdirectories)
 
 ## Tools
 
@@ -46,11 +47,13 @@ nix flake update <input-name>
 
 ## NixOS System Config
 
-System-level configuration is at `/etc/nixos/configuration.nix`. Changes there require:
+System-level configuration is managed via the flake in this repo under `nixos/`. Changes require:
 
 ```bash
-sudo nixos-rebuild switch
+sudo nixos-rebuild switch --flake .#<profile>
 ```
+
+The `<profile>` should match the NixOS configuration defined in `flake.nix` (e.g., `dev_thinkpad`).
 
 ## Key Differences
 
