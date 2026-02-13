@@ -11,6 +11,8 @@ in
 {
   imports = [
     ./common.nix
+    ./sops.nix
+    ./gpg.nix
     ./plasma.nix
   ];
 
