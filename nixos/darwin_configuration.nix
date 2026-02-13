@@ -1,7 +1,10 @@
 { config, pkgs, username, ... }:
 
 {
-  imports = [ ./base_configuration.nix ];
+  imports = [
+    ./base_configuration.nix
+    ./overlays/inet-utils.nix
+  ];
 
   system.stateVersion = 6;
   system.primaryUser = username;
