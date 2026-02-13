@@ -408,14 +408,9 @@ in
     # [re]load secrets on home-manager activation
     home.activation =
       let
-        darwin =
-          let
-            domain-target = "gui/$(id -u ${config.home.username})";
-          in
-          ''
-            /bin/launchctl bootout ${domain-target}/org.nix-community.home.sops-nix && true
-            /bin/launchctl bootstrap ${domain-target} ${config.home.homeDirectory}/Library/LaunchAgents/org.nix-community.home.sops-nix.plist
-          '';
+        # On Darwin, home-manager's setupLaunchAgents handles bootout/bootstrap
+        # of the sops-nix launch agent, so no manual launchctl calls are needed.
+        darwin = "true";
 
         linux =
           let
