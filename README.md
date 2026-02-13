@@ -12,7 +12,19 @@ home-manager switch --flake .#<profile>
 sudo nixos-rebuild switch --flake .#<profile>
 ```
 
-Use `laptop` or `desktop` for home-manager profiles. For NixOS profiles use `dev_thinkpad` or `desktop`.
+### nix-darwin (macOS system-level)
+
+Initial setup (requires sudo since system activation runs as root):
+```bash
+sudo nix run nix-darwin -- switch --flake .#<profile>
+```
+
+After initial setup:
+```bash
+darwin-rebuild switch --flake .#<profile>
+```
+
+Use `laptop` or `desktop` for home-manager profiles. For NixOS profiles use `dev_thinkpad` or `desktop`. For nix-darwin profiles use `macbook_air`.
 
 ## Secrets
 

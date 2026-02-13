@@ -1,16 +1,33 @@
 {
   "nodes": {
+    "brew-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1769363988,
+        "narHash": "sha256-BiGPeulrDVetXP+tjxhMcGLUROZAtZIhU5m4MqawCfM=",
+        "owner": "Homebrew",
+        "repo": "brew",
+        "rev": "d01011cac6d72032c75fd2cd9489909e95d9faf2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Homebrew",
+        "ref": "5.0.12",
+        "repo": "brew",
+        "type": "github"
+      }
+    },
     "claude-code": {
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1770765142,
-        "narHash": "sha256-OsjeMZWNbfltDS4hlT4sWCWIjAhXyVqatCc6NH0mV6c=",
+        "lastModified": 1770951502,
+        "narHash": "sha256-MtgcZ9wZQYCZoLQTbhqn770iQC1h8+46bx6Q1HtZSv4=",
         "owner": "sadjow",
         "repo": "claude-code-nix",
-        "rev": "fc5359e6ec89edfaaebfbd53780841808f2261b5",
+        "rev": "a697f13682fc60cda6e93eada4a9e2e4c7bac62e",
         "type": "github"
       },
       "original": {
@@ -58,6 +75,38 @@
         "type": "github"
       }
     },
+    "homebrew-cask": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1771007113,
+        "narHash": "sha256-66m0Yp8n6SpBdMsX/8iJnh3+RcNDULVf/uMOSnKlDfI=",
+        "owner": "homebrew",
+        "repo": "homebrew-cask",
+        "rev": "1d0df5224e46bbbde7476d9a979ae601ba342d6a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "homebrew",
+        "repo": "homebrew-cask",
+        "type": "github"
+      }
+    },
+    "homebrew-core": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1771010684,
+        "narHash": "sha256-fCiXG2r6IM8FIkpO52A6nBWCdWyYYg+W3m1bYiwodkg=",
+        "owner": "homebrew",
+        "repo": "homebrew-core",
+        "rev": "a677fbabeeab6e73adcd3339799c563b73dafe13",
+        "type": "github"
+      },
+      "original": {
+        "owner": "homebrew",
+        "repo": "homebrew-core",
+        "type": "github"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -79,13 +128,31 @@
         "type": "github"
       }
     },
+    "nix-homebrew": {
+      "inputs": {
+        "brew-src": "brew-src"
+      },
+      "locked": {
+        "lastModified": 1769437432,
+        "narHash": "sha256-8d7KnCpT2LweRvSzZYEGd9IM3eFX+A78opcnDM0+ndk=",
+        "owner": "zhaofengli",
+        "repo": "nix-homebrew",
+        "rev": "a5409abd0d5013d79775d3419bcac10eacb9d8c5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zhaofengli",
+        "repo": "nix-homebrew",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1770537093,
-        "narHash": "sha256-pF1quXG5wsgtyuPOHcLfYg/ft/QMr8NnX0i6tW2187s=",
+        "lastModified": 1770843696,
+        "narHash": "sha256-LovWTGDwXhkfCOmbgLVA10bvsi/P8eDDpRudgk68HA8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "fef9403a3e4d31b0a23f0bacebbec52c248fbb51",
+        "rev": "2343bbb58f99267223bc2aac4fc9ea301a155a16",
         "type": "github"
       },
       "original": {
@@ -97,11 +164,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1770617025,
-        "narHash": "sha256-1jZvgZoAagZZB6NwGRv2T2ezPy+X6EFDsJm+YSlsvEs=",
+        "lastModified": 1770770419,
+        "narHash": "sha256-iKZMkr6Cm9JzWlRYW/VPoL0A9jVKtZYiU4zSrVeetIs=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "2db38e08fdadcc0ce3232f7279bab59a15b94482",
+        "rev": "6c5e707c6b5339359a9a9e215c5e66d6d802fd7a",
         "type": "github"
       },
       "original": {
@@ -138,7 +205,10 @@
       "inputs": {
         "claude-code": "claude-code",
         "home-manager": "home-manager",
+        "homebrew-cask": "homebrew-cask",
+        "homebrew-core": "homebrew-core",
         "nix-darwin": "nix-darwin",
+        "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs_2",
         "plasma-manager": "plasma-manager",
         "sops-nix": "sops-nix"

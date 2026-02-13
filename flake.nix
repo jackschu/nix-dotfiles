@@ -16,6 +16,17 @@
       url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-homebrew = {
+      url = "github:zhaofengli/nix-homebrew";
+    };
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -30,6 +41,9 @@
       claude-code,
       sops-nix,
       nix-darwin,
+      nix-homebrew,
+      homebrew-core,
+      homebrew-cask,
       plasma-manager,
       ...
     }:
@@ -57,13 +71,32 @@
         modules = baseModules ++ [ ./desktop.nix ];
       };
 
-      darwinConfigurations."macbook_air" = nix-darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        specialArgs = { username = "jackschumann"; };
-        modules = [
-          ./nixos/darwin_configuration.nix
-        ];
-      };
+      darwinConfigurations."macbook_air" =
+        let username = "jackschumann";
+        in nix-darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          specialArgs = { inherit username; };
+          modules = [
+            nix-homebrew.darwinModules.nix-homebrew
+            {
+              nix-homebrew = {
+                enable = true;
+                user = username;
+                # Enable x86_64 Homebrew prefix (/usr/local) for Intel-only packages
+                # enableRosetta = true;
+                taps = {
+                  "homebrew/homebrew-core" = homebrew-core;
+                  "homebrew/homebrew-cask" = homebrew-cask;
+                };
+                mutableTaps = false;
+              };
+            }
+            ({ config, ... }: {
+              homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
+            })
+            ./nixos/darwin_configuration.nix
+          ];
+        };
 
       nixosConfigurations."dev_thinkpad" = nixpkgs.lib.nixosSystem {
         inherit system;
