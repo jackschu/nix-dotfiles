@@ -54,9 +54,19 @@
 
       nixosConfigurations."dev_thinkpad" = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { username = "devbox"; userDescription = "Jack Schumann"; };
         modules = [
           ./nixos/configuration.nix
           ./nixos/dev_thinkpad
+        ];
+      };
+
+      nixosConfigurations."desktop" = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { username = "jackschu"; userDescription = "Jack S"; };
+        modules = [
+          ./nixos/configuration.nix
+          ./nixos/desktop
         ];
       };
     };

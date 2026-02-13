@@ -1,5 +1,19 @@
 # home-manager config
 
+## Applying Changes
+
+### Home Manager (user-level)
+```bash
+home-manager switch --flake .#<profile>
+```
+
+### NixOS System (system-level)
+```bash
+sudo nixos-rebuild switch --flake .#<profile>
+```
+
+Use `laptop` or `desktop` for home-manager profiles. For NixOS profiles use `dev_thinkpad` or `desktop`.
+
 ## Secrets
 
 Secrets are encrypted with [sops](https://github.com/getsops/sops) using [age](https://github.com/FiloSottile/age) keys. The `secrets/` directory contains encrypted files that are safe to commit publicly - only devices with a corresponding age private key can decrypt them.

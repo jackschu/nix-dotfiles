@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, username, userDescription, ... }:
 
 {
   # Bootloader
@@ -29,6 +29,7 @@
   # Display and desktop
   services.xserver.enable = true;
   services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
   services.desktopManager.plasma6.enable = true;
 
   # Printing
@@ -55,13 +56,14 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
+  
   # User account
-  users.users.devbox = {
+  users.users.${username} = {
     isNormalUser = true;
-    description = "Jack Schumann";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    description = userDescription;
+    extraGroups = [ "networkmanager" "wheel" "docker" "kvm" ];
     packages = with pkgs; [
-      spotify discord pavucontrol
+      spotify discord pavucontrol zoom-us
       unzip imagemagick xclip
       nil bat ngrok
       xfce.xfce4-terminal git delta jq wget htop tokei gh clang clang-tools
@@ -79,12 +81,15 @@
       xorg.libXcursor
       xorg.libXi
       xorg.libXrandr
+      go gopls
+      yarn nodePackages.prettier
+      tree-sitter
+      emscripten
+      graphviz
+      pkg-config
+      docker
     ];
   };
-
-  # Auto login
-  services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "devbox";
 
   # Tailscale VPN
   services.tailscale.enable = true;
@@ -101,9 +106,9 @@
     };
   };
 
-  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
-  systemd.services."getty@tty1".enable = false;
-  systemd.services."autovt@tty1".enable = false;
+  # Nix settings
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.trusted-users = [ username ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -117,6 +122,8 @@
     emacs-nox
     ispell nixfmt silver-searcher
     nodejs
+    gparted e2fsprogs dosfstools ntfsprogs
+    node2nix
   ];
 
   # Emacs config
@@ -129,9 +136,6 @@
       });
     };
   };
-
-  # Nix settings
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Automatic garbage collection
   nix.gc = {
@@ -151,4 +155,5 @@
     hg = "git";
   };
   programs.xfconf.enable = true;
+  programs.npm.enable = true;
 }
