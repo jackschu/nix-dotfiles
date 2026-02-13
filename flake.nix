@@ -48,27 +48,40 @@
       ...
     }:
     let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
+      linuxSystem = "x86_64-linux";
+      darwinSystem = "aarch64-darwin";
+      linuxPkgs = import nixpkgs {
+        system = linuxSystem;
         config.allowUnfree = true;
         overlays = [ claude-code.overlays.default ];
       };
-      baseModules = [
+      darwinPkgs = import nixpkgs {
+        system = darwinSystem;
+        config.allowUnfree = true;
+        overlays = [ claude-code.overlays.default ];
+      };
+      commonModules = [
         sops-nix.homeManagerModules.sops
+      ];
+      linuxBaseModules = commonModules ++ [
         plasma-manager.homeModules.plasma-manager
         ./home.nix
       ];
     in
     {
       homeConfigurations."laptop" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = baseModules ++ [ ./laptop.nix ];
+        pkgs = linuxPkgs;
+        modules = linuxBaseModules ++ [ ./laptop.nix ];
       };
 
       homeConfigurations."desktop" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = baseModules ++ [ ./desktop.nix ];
+        pkgs = linuxPkgs;
+        modules = linuxBaseModules ++ [ ./desktop.nix ];
+      };
+
+      homeConfigurations."macbook_air" = home-manager.lib.homeManagerConfiguration {
+        pkgs = darwinPkgs;
+        modules = commonModules ++ [ ./darwin.nix ];
       };
 
       darwinConfigurations."macbook_air" =
@@ -99,7 +112,7 @@
         };
 
       nixosConfigurations."dev_thinkpad" = nixpkgs.lib.nixosSystem {
-        inherit system;
+        system = linuxSystem;
         specialArgs = { username = "devbox"; userDescription = "Jack Schumann"; };
         modules = [
           ./nixos/linux_configuration.nix
@@ -108,7 +121,7 @@
       };
 
       nixosConfigurations."desktop" = nixpkgs.lib.nixosSystem {
-        inherit system;
+        system = linuxSystem;
         specialArgs = { username = "jackschu"; userDescription = "Jack S"; };
         modules = [
           ./nixos/linux_configuration.nix
