@@ -1,0 +1,36 @@
+name: "Update flakes"
+on:
+  repository_dispatch:
+  workflow_dispatch:
+  schedule:
+    - cron:  '51 2 * * 0'
+
+jobs:
+  createPullRequest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.CI_APP_ID }}
+          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
+      - name: Update flakes
+        run: |
+           nix flake update
+           pushd dev/private
+           nix flake update
+           popd
+           nix run .#update-dev-private-narHash
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          title: Update flakes
+          token: ${{ steps.app-token.outputs.token }}
+          labels: |
+            auto-merge

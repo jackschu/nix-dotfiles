@@ -12,4 +12,6 @@
 
   home.username = "jackschumann";
   home.homeDirectory = "/Users/jackschumann";
+
+  custom.secrets.enable = true;
 }

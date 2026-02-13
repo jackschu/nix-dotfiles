@@ -9,7 +9,7 @@
     };
     claude-code.url = "github:sadjow/claude-code-nix";
     sops-nix = {
-      url = "github:Mic92/sops-nix";
+      url = "path:./sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-darwin = {
