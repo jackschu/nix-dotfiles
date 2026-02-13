@@ -14,4 +14,5 @@
   home.homeDirectory = "/Users/jackschumann";
 
   custom.secrets.enable = true;
+  custom.gpg.enable = true;
 }
