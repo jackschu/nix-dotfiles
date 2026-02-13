@@ -24,7 +24,6 @@
     enable = true;
     onActivation.cleanup = "zap";
     casks = [
-      "xcode"
     ];
   };
 }

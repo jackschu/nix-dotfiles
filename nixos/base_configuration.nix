@@ -22,6 +22,7 @@
 
   # System packages (cross-platform)
   environment.systemPackages = with pkgs; [
+    home-manager
     fd
     bottom
     gnuplot
