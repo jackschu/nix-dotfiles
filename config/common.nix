@@ -7,6 +7,8 @@
 
 {
   imports = [
+    ./sops.nix
+    ./gpg.nix
     ./git.nix
   ];
 

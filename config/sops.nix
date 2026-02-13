@@ -2,6 +2,8 @@
 { config, pkgs, lib, ... }:
 
 let
+  cfg = config.custom.secrets;
+
   sopsAgeRelPath = "sops/age";
   ageKeyDir = "${config.xdg.configHome}/${sopsAgeRelPath}";
   ageKeyFile = "${ageKeyDir}/keys.txt";
@@ -43,27 +45,31 @@ let
   '';
 in
 {
-  home.packages = [
-    pkgs.age
-    pkgs.sops
-    showAgeKey
-    sopsEdit
-    sopsRekey
-  ];
+  options.custom.secrets.enable = lib.mkEnableOption "sops/age secrets management";
 
-  # Ensure the age key directory exists
-  xdg.configFile."${sopsAgeRelPath}/.keep".text = "";
+  config = lib.mkIf cfg.enable {
+    home.packages = [
+      pkgs.age
+      pkgs.sops
+      showAgeKey
+      sopsEdit
+      sopsRekey
+    ];
 
-  # Generate age key on first activation
-  home.activation.generateAgeKey = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
-    if [ ! -f "${ageKeyFile}" ]; then
-      run ${pkgs.age}/bin/age-keygen -o "${ageKeyFile}"
-    fi
-  '';
+    # Ensure the age key directory exists
+    xdg.configFile."${sopsAgeRelPath}/.keep".text = "";
 
-  # sops-nix configuration
-  sops = {
-    age.keyFile = ageKeyFile;
-    defaultSopsFile = ../secrets/secrets.yaml;
+    # Generate age key on first activation
+    home.activation.generateAgeKey = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+      if [ ! -f "${ageKeyFile}" ]; then
+        run ${pkgs.age}/bin/age-keygen -o "${ageKeyFile}"
+      fi
+    '';
+
+    # sops-nix configuration
+    sops = {
+      age.keyFile = ageKeyFile;
+      defaultSopsFile = ../secrets/secrets.yaml;
+    };
   };
 }

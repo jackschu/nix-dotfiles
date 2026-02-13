@@ -11,10 +11,11 @@ in
 {
   imports = [
     ./common.nix
-    ./sops.nix
-    ./gpg.nix
     ./plasma.nix
   ];
+
+  custom.secrets.enable = true;
+  custom.gpg.enable = true;
 
   home.packages = with pkgs; [
     wl-clipboard

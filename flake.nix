@@ -90,7 +90,7 @@
 
       homeConfigurations."macbook_air" = home-manager.lib.homeManagerConfiguration {
         pkgs = darwinPkgs;
-        modules = [ ./config/darwin.nix ];
+        modules = commonModules ++ [ ./config/darwin.nix ];
       };
 
       darwinConfigurations."macbook_air" =
