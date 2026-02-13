@@ -12,6 +12,10 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -25,6 +29,7 @@
       home-manager,
       claude-code,
       sops-nix,
+      nix-darwin,
       plasma-manager,
       ...
     }:
@@ -50,6 +55,14 @@
       homeConfigurations."desktop" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = baseModules ++ [ ./desktop.nix ];
+      };
+
+      darwinConfigurations."macbook_air" = nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = { username = "jackschumann"; };
+        modules = [
+          ./nixos/darwin_configuration.nix
+        ];
       };
 
       nixosConfigurations."dev_thinkpad" = nixpkgs.lib.nixosSystem {
