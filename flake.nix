@@ -65,23 +65,23 @@
       ];
       linuxBaseModules = commonModules ++ [
         plasma-manager.homeModules.plasma-manager
-        ./home.nix
+        ./config/linux_common.nix
       ];
     in
     {
       homeConfigurations."laptop" = home-manager.lib.homeManagerConfiguration {
         pkgs = linuxPkgs;
-        modules = linuxBaseModules ++ [ ./laptop.nix ];
+        modules = linuxBaseModules ++ [ ./config/laptop.nix ];
       };
 
       homeConfigurations."desktop" = home-manager.lib.homeManagerConfiguration {
         pkgs = linuxPkgs;
-        modules = linuxBaseModules ++ [ ./desktop.nix ];
+        modules = linuxBaseModules ++ [ ./config/desktop.nix ];
       };
 
       homeConfigurations."macbook_air" = home-manager.lib.homeManagerConfiguration {
         pkgs = darwinPkgs;
-        modules = commonModules ++ [ ./darwin.nix ];
+        modules = commonModules ++ [ ./config/darwin.nix ];
       };
 
       darwinConfigurations."macbook_air" =

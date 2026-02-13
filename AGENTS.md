@@ -7,9 +7,12 @@ This is a flake-based NixOS and home-manager configuration. The flake manages bo
 ## Structure
 
 - `flake.nix` - Flake inputs, home configurations, and NixOS system configurations
-- `home.nix` - Shared configuration for all machines
-- `laptop.nix` / `desktop.nix` - Machine-specific overrides (username, home directory, hardware-specific settings)
-- `git.nix`, `gpg.nix`, `sops.nix` - Modular configurations imported by home.nix
+- `config/` - User-level home-manager configurations
+  - `common.nix` - Shared configuration for all machines
+  - `linux_common.nix` - Shared configuration for Linux machines
+  - `darwin.nix` - macOS-specific configuration
+  - `laptop.nix` / `desktop.nix` - Machine-specific overrides (username, home directory, hardware-specific settings)
+  - `git.nix`, `gpg.nix`, `sops.nix`, `plasma.nix` - Modular configurations
 - `nixos/` - NixOS system configurations (per-machine in subdirectories)
 
 ## Tools

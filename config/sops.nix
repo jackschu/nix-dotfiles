@@ -63,6 +63,6 @@ in
   # sops-nix configuration
   sops = {
     age.keyFile = ageKeyFile;
-    defaultSopsFile = ./secrets/secrets.yaml;
+    defaultSopsFile = ../secrets/secrets.yaml;
   };
 }
