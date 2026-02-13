@@ -12,6 +12,9 @@
   nix.gc.interval = { Weekday = 0; Hour = 2; Minute = 0; };
   nix.gc.options = "--delete-older-than 30d";
 
+  custom.secrets.enable = true;
+  custom.gpg.enable = true;
+
   # User account
   users.users.${username} = {
     home = "/Users/${username}";

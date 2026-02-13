@@ -13,7 +13,7 @@ let
   ageKeys = {
     devbox = "age12x8hm7w8nns7w7z2ufsfz4ey9yyklatv3pfu508va4ej5hxq3dcsydq9as";
     desktop = "age192ar45qk70f7jh2wa4457lx03ddcfntjtg9l376gra2mrmt3za2qp9ye9a";
-    macbook = "age1zgjlumpan6a44vh6tn2kdkjgcz5dndvxwz2esy8mt5ym7dfuw5ds3jclg3";
+    macbook = "age1s9cnewc9avvl4zcwl2pw9c85vsszcfxsh8grh5ydu97jvx9zc5ssqly8sr";
   };
 
   yaml = pkgs.formats.yaml { };
