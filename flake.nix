@@ -56,7 +56,7 @@
         inherit system;
         specialArgs = { username = "devbox"; userDescription = "Jack Schumann"; };
         modules = [
-          ./nixos/configuration.nix
+          ./nixos/linux_configuration.nix
           ./nixos/dev_thinkpad
         ];
       };
@@ -65,7 +65,7 @@
         inherit system;
         specialArgs = { username = "jackschu"; userDescription = "Jack S"; };
         modules = [
-          ./nixos/configuration.nix
+          ./nixos/linux_configuration.nix
           ./nixos/desktop
         ];
       };
