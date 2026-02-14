@@ -13,9 +13,14 @@
   nix.gc.options = "--delete-older-than 30d";
 
   # User account
+  environment.shells = [ pkgs.bash ];
   users.users.${username} = {
     home = "/Users/${username}";
+    shell = pkgs.bash;
   };
+
+  # Dark mode
+  system.defaults.NSGlobalDomain.AppleInterfaceStyle = "Dark";
 
   # Shell
   environment.shellInit = ''
@@ -27,6 +32,9 @@
     enable = true;
     onActivation.cleanup = "zap";
     casks = [
+      "google-chrome"
+      # TODO need xcode
+      # "ghostty"
     ];
   };
 }

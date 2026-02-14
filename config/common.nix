@@ -52,4 +52,9 @@
       cd = "z";
     };
   };
+
+  programs.readline = {
+    enable = true;
+    extraConfig = "set bell-style none";
+  };
 }
