@@ -59,35 +59,44 @@
       "#1d2230" # 5: darkest bg
     ];
     c = i: builtins.elemAt colors i;
+    style = fg: bg: "fg:${c fg} bg:${c bg}";
+    # sep: null for no separator, true to fade to terminal, or a color
+    #      index for the next block's background
+    block = fg: bg: content: sep:
+      "[${content}](${style fg bg})"
+      + (if sep == null then ""
+         else if sep == true then "[${g.separator}](fg:${c bg})"
+         else "[${g.separator}](${style bg sep})");
   in {
     enable = true;
     enableBashIntegration = true;
     settings = {
       format = ''
-        [${g.gradient}](${c 1})[ ${g.sparkle} ](bg:${c 1} fg:${c 0})[${g.separator}](bg:${c 2} fg:${c 1})$directory$git_branch$git_status$env_var
+        [${g.gradient}](${c 1})[  ](${style 0 1})[${g.separator}](${style 1 2})$directory$git_branch$git_status$env_var
         $character'';
 
       git_branch = {
         disabled = false;
-        style = "fg:${c 2} bg:${c 3}";
-        format = "[[ $symbol$branch ](fg:${c 2} bg:${c 3})]($style)";
+        style = style 2 3;
+        format = block 2 3 " $symbol$branch " null;
       };
 
       git_status = {
-        style = "fg:${c 2} bg:${c 3}";
-        format = "[[($all_status$ahead_behind)](fg:${c 2} bg:${c 3})]($style)[${g.separator}](fg:${c 3})";
+        style = style 2 3;
+        format = block 2 3 "($all_status$ahead_behind)" true;
       };
 
       env_var.context = {
         variable = "SHELL_CONTEXT";
-        style = "fg:${c 2} bg:${c 5}";
-        format = "[ $env_value ]($style)[${g.separator}](fg:${c 5} bg:${c 3})";
+        style = style 2 5;
+	# TODO this isnt quite right, 
+        format = block 2 5 " $env_value " 3;
         disabled = false;
       };
 
       directory = {
-        style = "fg:${c 4} bg:${c 2}";
-        format = "[ $path ]($style)[${g.separator}](fg:${c 2} bg:${c 3})";
+        style = style 4 2;
+        format = block 4 2 " $path " 3;
         truncation_length = 3;
         truncation_symbol = "${g.ellipsis}/";
         home_symbol = "${g.home}";
