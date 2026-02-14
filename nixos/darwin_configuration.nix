@@ -1,4 +1,4 @@
-{ config, pkgs, username, ... }:
+{ config, pkgs, username, uid, ... }:
 
 {
   imports = [
@@ -14,13 +14,24 @@
 
   # User account
   environment.shells = [ pkgs.bash ];
+  users.knownUsers = [ username ];
   users.users.${username} = {
+    inherit uid;
     home = "/Users/${username}";
     shell = pkgs.bash;
   };
 
+  # TouchID for sudo
+  security.pam.services.sudo_local.touchIdAuth = true;
+
   # Dark mode
   system.defaults.NSGlobalDomain.AppleInterfaceStyle = "Dark";
+
+  # Show keyboard brightness in Control Center
+  system.defaults.CustomUserPreferences."com.apple.controlcenter" = {
+    "NSStatusItem Visible KeyboardBrightness" = true;
+    KeyboardBrightness = 25;
+  };
 
   # Shell
   environment.shellInit = ''
@@ -33,8 +44,7 @@
     onActivation.cleanup = "zap";
     casks = [
       "google-chrome"
-      # TODO need xcode
-      # "ghostty"
+      "ghostty"
     ];
   };
 }

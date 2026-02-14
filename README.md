@@ -12,16 +12,32 @@ home-manager switch --flake .#<profile>
 sudo nixos-rebuild switch --flake .#<profile>
 ```
 
-### nix-darwin (macOS system-level)
+### macOS Setup
 
-Initial setup (requires sudo since system activation runs as root):
-```bash
-sudo nix run nix-darwin -- switch --flake .#<profile>
+Update the darwin constants in `flake.nix` under `darwinConfigurations` for your machine:
+
+```nix
+username = "jackschumann";  # your macOS username
+uid = 501;                  # your user ID (run `id -u` to find it)
 ```
 
-After initial setup:
+You may want to create a new configuration and profile name in `flake.nix` for your machine.
+
 ```bash
-darwin-rebuild switch --flake .#<profile>
+# Install Xcode Command Line Tools
+xcode-select --install
+
+# Install Lix (https://lix.systems/install/)
+curl -sSf -L https://install.lix.systems/lix | sh -s -- install
+
+# Apply home-manager configuration
+sudo home-manager switch --flake .#macbook_air
+
+# Initial nix-darwin setup (system-level, requires sudo)
+sudo nix run nix-darwin -- switch --flake .#macbook_air
+
+# After initial nix-darwin setup, use:
+darwin-rebuild switch --flake .#macbook_air
 ```
 
 Use `laptop` or `desktop` for home-manager profiles. For NixOS profiles use `dev_thinkpad` or `desktop`. For nix-darwin profiles use `macbook_air`.

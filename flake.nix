@@ -94,10 +94,13 @@
       };
 
       darwinConfigurations."macbook_air" =
-        let username = "jackschumann";
+        let
+          # Darwin user constants — update these for your machine
+          username = "jackschumann";
+          uid = 501;
         in nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
-          specialArgs = { inherit username; };
+          specialArgs = { inherit username uid; };
           modules = [
             nix-homebrew.darwinModules.nix-homebrew
             {
