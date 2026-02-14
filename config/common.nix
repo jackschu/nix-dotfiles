@@ -49,7 +49,7 @@
 
 
   programs.starship = let
-  
+    g = import ./starship_glyphs.nix;
     colors = [
       "#090c0c" # 0: dark text
       "#a3aed2" # 1: header accent
@@ -64,7 +64,7 @@
     enableBashIntegration = true;
     settings = {
       format = ''
-        [░▒▓](${c 1})[ ](bg:${c 1} fg:${c 0})[](bg:${c 2} fg:${c 1})$directory$git_branch$git_status$env_var
+        [${g.gradient}](${c 1})[ ${g.sparkle} ](bg:${c 1} fg:${c 0})[${g.separator}](bg:${c 2} fg:${c 1})$directory$git_branch$git_status$env_var
         $character'';
 
       git_branch = {
@@ -75,26 +75,26 @@
 
       git_status = {
         style = "fg:${c 2} bg:${c 3}";
-        format = "[[($all_status$ahead_behind)](fg:${c 2} bg:${c 3})]($style)[](fg:${c 3})";
+        format = "[[($all_status$ahead_behind)](fg:${c 2} bg:${c 3})]($style)[${g.separator}](fg:${c 3})";
       };
 
       env_var.context = {
         variable = "SHELL_CONTEXT";
         style = "fg:${c 2} bg:${c 5}";
-        format = "[ $env_value ]($style)[](fg:${c 5} bg:${c 3})";
+        format = "[ $env_value ]($style)[${g.separator}](fg:${c 5} bg:${c 3})";
         disabled = false;
       };
 
       directory = {
         style = "fg:${c 4} bg:${c 2}";
-        format = "[ $path ]($style)[](fg:${c 2} bg:${c 3})";
+        format = "[ $path ]($style)[${g.separator}](fg:${c 2} bg:${c 3})";
         truncation_length = 3;
-        truncation_symbol = "…/";
-        home_symbol = "";
+        truncation_symbol = "${g.ellipsis}/";
+        home_symbol = "${g.home}";
       };
 
       character = {
-        format = "[❯ ](bold purple)";
+        format = "[${g.prompt} ](bold purple)";
       };
 
       time = {
