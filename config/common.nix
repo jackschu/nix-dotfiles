@@ -119,6 +119,16 @@
     };
   };
 
+  programs.ghostty = {
+    enable = true;
+    settings = {
+      background-image = builtins.toString ./terminal_bg.png;
+      background-image-opacity = 1;
+      background-image-fit = "cover";
+      background-opacity = 0.9;
+    };
+  };
+
   programs.readline = {
     enable = true;
     extraConfig = "set bell-style none";
