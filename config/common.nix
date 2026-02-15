@@ -26,6 +26,10 @@
     noto-fonts-cjk-sans
     noto-fonts-color-emoji
     nerd-fonts.jetbrains-mono
+
+    # Apps
+    discord
+    spotify
   ];
 
   fonts.fontconfig.enable = true;

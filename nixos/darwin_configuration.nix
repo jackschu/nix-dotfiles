@@ -39,11 +39,14 @@
   '';
 
   # App switching hotkeys
+  # After applying changes, run `skhd --reload` to pick up new bindings
   services.skhd = {
     enable = true;
     skhdConfig = ''
       ctrl - 1 : open -a "Ghostty"
       ctrl - 2 : open -a "Google Chrome"
+      ctrl - 3 : open -a "Discord"
+      ctrl - 4 : open -a "Spotify"
     '';
   };
 

@@ -63,7 +63,7 @@
     description = userDescription;
     extraGroups = [ "networkmanager" "wheel" "docker" "kvm" ];
     packages = with pkgs; [
-      spotify discord pavucontrol zoom-us
+      pavucontrol zoom-us
       unzip imagemagick xclip
       nil bat ngrok
       xfce.xfce4-terminal git delta jq wget htop tokei gh clang clang-tools

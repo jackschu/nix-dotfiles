@@ -62,7 +62,7 @@
     extraGroups = [ "networkmanager" "wheel" "docker" "kvm" ];
     packages = with pkgs; [
       # GUI apps
-      spotify discord pavucontrol zoom-us
+      pavucontrol zoom-us
       xfce.xfce4-terminal firefox
       # Linux-specific tools
       xclip
