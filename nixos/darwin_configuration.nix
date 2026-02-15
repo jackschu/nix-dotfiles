@@ -38,6 +38,15 @@
     export PATH="$HOME/.cargo/bin/:$PATH"
   '';
 
+  # App switching hotkeys
+  services.skhd = {
+    enable = true;
+    skhdConfig = ''
+      ctrl - 1 : open -a "Ghostty"
+      ctrl - 2 : open -a "Google Chrome"
+    '';
+  };
+
   # Homebrew integration (for apps not in nixpkgs)
   homebrew = {
     enable = true;
