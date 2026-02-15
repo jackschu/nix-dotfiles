@@ -1,5 +1,8 @@
 { config, pkgs, username, uid, ... }:
 
+let
+  packages = import ../installed_packages.nix pkgs;
+in
 {
   imports = [
     ./base_configuration.nix
@@ -54,9 +57,6 @@
   homebrew = {
     enable = true;
     onActivation.cleanup = "zap";
-    casks = [
-      "google-chrome"
-      "ghostty"
-    ];
+    casks = packages.brew.casks;
   };
 }

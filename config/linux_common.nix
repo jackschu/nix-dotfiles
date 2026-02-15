@@ -6,6 +6,7 @@
 }:
 
 let
+  packages = import ../installed_packages.nix pkgs;
   browser = "google-chrome.desktop";
 in
 {
@@ -17,10 +18,7 @@ in
   custom.secrets.enable = true;
   custom.gpg.enable = true;
 
-  home.packages = with pkgs; [
-    wl-clipboard
-    kdePackages.kdbusaddons
-  ];
+  home.packages = packages.home.linux;
 
   home.file = { };
 

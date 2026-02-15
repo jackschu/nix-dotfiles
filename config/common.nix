@@ -5,6 +5,9 @@
   ...
 }:
 
+let
+  packages = import ../installed_packages.nix pkgs;
+in
 {
   imports = [
     ./sops.nix
@@ -15,22 +18,7 @@
   # Common configuration for all machines
   home.stateVersion = "25.11";
 
-  home.packages = with pkgs; [
-    claude-code
-    ripgrep
-    tree
-
-    # General fonts
-    inter
-    noto-fonts
-    noto-fonts-cjk-sans
-    noto-fonts-color-emoji
-    nerd-fonts.jetbrains-mono
-
-    # Apps
-    discord
-    spotify
-  ];
+  home.packages = packages.home.common;
 
   fonts.fontconfig.enable = true;
 

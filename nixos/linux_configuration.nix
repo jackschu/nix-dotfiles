@@ -1,5 +1,8 @@
 { config, pkgs, username, userDescription, ... }:
 
+let
+  packages = import ../installed_packages.nix pkgs;
+in
 {
   imports = [ ./base_configuration.nix ];
   # Bootloader
@@ -33,13 +36,7 @@
 
   # Printing
   services.printing.enable = true;
-  services.printing.drivers = with pkgs; [
-    cups-filters
-    cups-browsed
-    brlaser
-    brgenml1lpr
-    brgenml1cupswrapper
-  ];
+  services.printing.drivers = packages.system.linuxPrinting;
 
   # Audio
   services.pulseaudio.enable = false;
@@ -60,18 +57,7 @@
     isNormalUser = true;
     description = userDescription;
     extraGroups = [ "networkmanager" "wheel" "docker" "kvm" ];
-    packages = with pkgs; [
-      # GUI apps
-      pavucontrol zoom-us
-      xfce.xfce4-terminal firefox
-      # Linux-specific tools
-      xclip
-      steam-run patchelf
-      emscripten docker
-      # Graphics / Wayland libs
-      libGL libxkbcommon wayland
-      xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr
-    ];
+    packages = packages.user.linux;
   };
 
   # Docker
@@ -87,10 +73,7 @@
   };
 
   # Linux-only system packages
-  environment.systemPackages = with pkgs; [
-    perf
-    gparted e2fsprogs dosfstools ntfsprogs
-  ];
+  environment.systemPackages = packages.system.linux;
 
   # Garbage collection schedule (systemd timer)
   nix.gc = {
