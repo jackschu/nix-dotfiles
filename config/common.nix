@@ -119,6 +119,7 @@ in
       background-image-fit = "cover";
       background-opacity = 0.9;
       font-feature = ["-liga" "-dlig" "-calt"];
+      desktop-notifications = false;
       keybind = [
         "alt+one=goto_tab:1"
         "alt+two=goto_tab:2"

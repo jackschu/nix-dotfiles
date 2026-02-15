@@ -15,7 +15,7 @@
           {
             iconTasks = {
               launchers = [
-                "applications:xfce4-terminal.desktop"
+                "applications:com.mitchellh.ghostty.desktop"
                 "applications:google-chrome.desktop"
                 "applications:discord.desktop"
                 "applications:spotify.desktop"

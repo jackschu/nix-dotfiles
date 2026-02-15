@@ -31,7 +31,7 @@ pkgs: with pkgs; {
     ];
     linux = [
       # GUI apps
-      pavucontrol zoom-us xfce.xfce4-terminal firefox
+      pavucontrol zoom-us firefox
       # Linux-specific tools
       xclip steam-run patchelf emscripten docker
       # Graphics / Wayland libs
