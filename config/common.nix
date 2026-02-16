@@ -121,6 +121,10 @@ in
       font-feature = ["-liga" "-dlig" "-calt"];
       desktop-notifications = false;
       keybind = [
+        # Clipboard
+        "ctrl+shift+c=copy_to_clipboard"
+        "ctrl+shift+v=paste_from_clipboard"
+        # Tab navigation
         "alt+one=goto_tab:1"
         "alt+two=goto_tab:2"
         "alt+three=goto_tab:3"
