@@ -12,7 +12,7 @@ in
   # Networking
   networking.networkmanager.enable = true;
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
-  networking.enableIPv6 = false;
+#  networking.enableIPv6 = false;
 
   # Locale
   i18n.defaultLocale = "en_US.UTF-8";

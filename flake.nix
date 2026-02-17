@@ -32,6 +32,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    agent-runtime = {
+      url = "git+file:///home/devbox/proj/agent_runtime";
+    };
   };
 
   outputs =
@@ -45,6 +48,7 @@
       homebrew-core,
       homebrew-cask,
       plasma-manager,
+      agent-runtime,
       ...
     }:
     let
@@ -127,6 +131,7 @@
         system = linuxSystem;
         specialArgs = { username = "devbox"; userDescription = "Jack Schumann"; };
         modules = [
+          agent-runtime.nixosModules.host
           ./nixos/linux_configuration.nix
           ./nixos/dev_thinkpad
         ];
@@ -136,6 +141,7 @@
         system = linuxSystem;
         specialArgs = { username = "jackschu"; userDescription = "Jack S"; };
         modules = [
+          agent-runtime.nixosModules.host
           ./nixos/linux_configuration.nix
           ./nixos/desktop
         ];
