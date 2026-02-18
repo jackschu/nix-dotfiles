@@ -9,7 +9,7 @@
     };
     claude-code.url = "github:sadjow/claude-code-nix";
     sops-nix = {
-      url = "github:Mic92/sops-nix";
+      url = "git+https://github.com/jackschu/sops-nix?ref=fix-darwin-activation-order";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-darwin = {
