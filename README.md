@@ -1,4 +1,4 @@
-# home-manager config
+# nix-dotfiles
 
 ## Applying Changes
 
