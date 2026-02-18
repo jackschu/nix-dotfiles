@@ -30,6 +30,9 @@ in
   # Dark mode
   system.defaults.NSGlobalDomain.AppleInterfaceStyle = "Dark";
 
+  # Disable autocorrect
+  system.defaults.NSGlobalDomain.NSAutomaticSpellingCorrectionEnabled = false;
+
   # Show keyboard brightness in Control Center
   system.defaults.CustomUserPreferences."com.apple.controlcenter" = {
     "NSStatusItem Visible KeyboardBrightness" = true;
@@ -50,6 +53,7 @@ in
       ctrl - 2 : open -a "Google Chrome"
       ctrl - 3 : open -a "Discord"
       ctrl - 4 : open -a "Spotify"
+      ctrl - 5 : open -a "Messages"
     '';
   };
 
