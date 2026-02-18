@@ -1,5 +1,6 @@
 pkgs: with pkgs; {
   # Prefer using home.* for new packages (declaratively managed via home-manager)
+  # NOTE: Emacs runtime deps (rust-analyzer, prettier, sphinx, etc.) are in config/emacs.nix
   home = {
     common = [
       claude-code ripgrep tree yt-dlp

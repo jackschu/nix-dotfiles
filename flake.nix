@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -37,6 +38,7 @@
   outputs =
     {
       nixpkgs,
+      nixpkgs-unstable,
       home-manager,
       claude-code,
       sops-nix,
@@ -69,6 +71,12 @@
         config.allowUnfree = true;
         overlays = [ claude-code.overlays.default inetutilsOverlay ];
       };
+      linuxPkgsUnstable = import nixpkgs-unstable {
+        system = linuxSystem;
+      };
+      darwinPkgsUnstable = import nixpkgs-unstable {
+        system = darwinSystem;
+      };
       commonModules = [
         sops-nix.homeManagerModules.sops
       ];
@@ -80,16 +88,19 @@
     {
       homeConfigurations."laptop" = home-manager.lib.homeManagerConfiguration {
         pkgs = linuxPkgs;
+        extraSpecialArgs = { pkgs-unstable = linuxPkgsUnstable; };
         modules = linuxBaseModules ++ [ ./config/laptop.nix ];
       };
 
       homeConfigurations."desktop" = home-manager.lib.homeManagerConfiguration {
         pkgs = linuxPkgs;
+        extraSpecialArgs = { pkgs-unstable = linuxPkgsUnstable; };
         modules = linuxBaseModules ++ [ ./config/desktop.nix ];
       };
 
       homeConfigurations."macbook_air" = home-manager.lib.homeManagerConfiguration {
         pkgs = darwinPkgs;
+        extraSpecialArgs = { pkgs-unstable = darwinPkgsUnstable; };
         modules = commonModules ++ [ ./config/darwin.nix ];
       };
 

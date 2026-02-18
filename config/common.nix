@@ -13,6 +13,7 @@ in
     ./sops.nix
     ./gpg.nix
     ./git.nix
+    ./emacs.nix
   ];
 
   # Common configuration for all machines

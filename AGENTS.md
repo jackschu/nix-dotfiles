@@ -58,6 +58,10 @@ sudo nixos-rebuild switch --flake .#<profile>
 
 The `<profile>` should match the NixOS configuration defined in `flake.nix` (e.g., `dev_thinkpad`).
 
+## Patterns
+
+- To ensure a directory exists under `$HOME`, use `home.file."path/to/dir/.keep".text = "";`
+
 ## Key Differences
 
 - **home-manager**: User packages, dotfiles, shell config, services like easyeffects
