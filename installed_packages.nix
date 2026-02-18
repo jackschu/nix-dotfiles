@@ -1,7 +1,8 @@
 pkgs: with pkgs; {
+  # Prefer using home.* for new packages (declaratively managed via home-manager)
   home = {
     common = [
-      claude-code ripgrep tree
+      claude-code ripgrep tree yt-dlp
       # Fonts
       inter noto-fonts noto-fonts-cjk-sans noto-fonts-color-emoji
       nerd-fonts.jetbrains-mono
