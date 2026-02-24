@@ -372,6 +372,8 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
   (define-key helm-map (kbd "<backtab>") #'helm-previous-line))
 
 (global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(setq helm-buffer-details-flag nil)
 (helm-mode 1)
 (set-face-attribute 'helm-selection nil
                     :background "purple"
