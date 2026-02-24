@@ -61,6 +61,7 @@ in
   homebrew = {
     enable = true;
     onActivation.cleanup = "zap";
+    brews = packages.brew.formulas;
     casks = packages.brew.casks;
   };
 }

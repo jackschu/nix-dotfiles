@@ -1,4 +1,4 @@
-pkgs: with pkgs; {
+pkgs: with pkgs; let isX86 = pkgs.stdenv.hostPlatform.isx86; in {
   # Prefer using home.* for new packages (declaratively managed via home-manager)
   # NOTE: Emacs runtime deps (rust-analyzer, prettier, sphinx, etc.) are in config/emacs.nix
   home = {
@@ -7,7 +7,8 @@ pkgs: with pkgs; {
       # Fonts
       inter noto-fonts noto-fonts-cjk-sans noto-fonts-color-emoji
       nerd-fonts.jetbrains-mono
-      # Apps
+    ] ++ lib.optionals isX86 [
+      # Desktop apps (x86-only)
       discord spotify
     ];
     linux = [ wl-clipboard kdePackages.kdbusaddons ];
@@ -15,7 +16,7 @@ pkgs: with pkgs; {
 
   system = {
     common = [
-      home-manager fd bottom gnuplot emacs-nox
+      home-manager fd bottom gnuplot emacs-nox git
       ispell nixfmt silver-searcher nodejs node2nix
     ];
     linux = [ perf gparted e2fsprogs dosfstools ntfsprogs ];
@@ -33,14 +34,17 @@ pkgs: with pkgs; {
     ];
     linux = [
       # GUI apps
-      pavucontrol zoom-us firefox
+      pavucontrol firefox
       # Linux-specific tools
-      xclip steam-run patchelf emscripten docker
+      xclip patchelf emscripten docker
       # Graphics / Wayland libs
       libGL libxkbcommon wayland
       xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr
+    ] ++ lib.optionals isX86 [
+      zoom-us steam-run
     ];
   };
 
+  brew.formulas = [ "lima" ];
   brew.casks = [ "google-chrome" "ghostty" ];
 }

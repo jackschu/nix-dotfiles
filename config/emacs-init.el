@@ -382,6 +382,7 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
 (helm-projectile-on)
 
 ;; helm-ag
+(require 'helm-ag)
 (setq helm-ag-insert-at-point 'symbol)
 (global-set-key (kbd "M-/") 'helm-ag-project-root)
 
