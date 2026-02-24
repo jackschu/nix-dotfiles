@@ -28,6 +28,11 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
+    # @nocommit factor this into the agent_runtime project
+    nixos-lima = {
+      url = "github:nixos-lima/nixos-lima/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -46,14 +51,21 @@
       nix-homebrew,
       homebrew-core,
       homebrew-cask,
+      nixos-lima,
       plasma-manager,
       ...
     }:
     let
       linuxSystem = "x86_64-linux";
+      armLinuxSystem = "aarch64-linux";
       darwinSystem = "aarch64-darwin";
       linuxPkgs = import nixpkgs {
         system = linuxSystem;
+        config.allowUnfree = true;
+        overlays = [ claude-code.overlays.default ];
+      };
+      armLinuxPkgs = import nixpkgs {
+        system = armLinuxSystem;
         config.allowUnfree = true;
         overlays = [ claude-code.overlays.default ];
       };
@@ -73,6 +85,9 @@
       };
       linuxPkgsUnstable = import nixpkgs-unstable {
         system = linuxSystem;
+      };
+      armLinuxPkgsUnstable = import nixpkgs-unstable {
+        system = armLinuxSystem;
       };
       darwinPkgsUnstable = import nixpkgs-unstable {
         system = darwinSystem;
@@ -96,6 +111,12 @@
         pkgs = linuxPkgs;
         extraSpecialArgs = { pkgs-unstable = linuxPkgsUnstable; };
         modules = linuxBaseModules ++ [ ./config/desktop.nix ];
+      };
+
+      homeConfigurations."arm_linux" = home-manager.lib.homeManagerConfiguration {
+        pkgs = armLinuxPkgs;
+        extraSpecialArgs = { pkgs-unstable = armLinuxPkgsUnstable; };
+        modules = linuxBaseModules ++ [ ./config/arm_linux.nix ];
       };
 
       homeConfigurations."macbook_air" = home-manager.lib.homeManagerConfiguration {
@@ -133,6 +154,15 @@
             ./nixos/darwin_configuration.nix
           ];
         };
+
+      nixosConfigurations."arm_linux" = nixpkgs.lib.nixosSystem {
+        system = armLinuxSystem;
+        specialArgs = { inherit nixos-lima; username = "jackschumann"; userDescription = "Jack Schumann"; };
+        modules = [
+          ./nixos/linux_configuration.nix
+          ./nixos/arm_linux
+        ];
+      };
 
       nixosConfigurations."dev_thinkpad" = nixpkgs.lib.nixosSystem {
         system = linuxSystem;
