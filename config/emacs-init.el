@@ -530,6 +530,9 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
 (add-hook 'nix-mode-hook 'lsp-mode)
 (add-hook 'nix-ts-mode-hook 'lsp-mode)
 
+;; swift
+(add-to-list 'auto-mode-alist '("\\.swift\\'" . swift-ts-mode))
+
 ;; go stuffn
 (add-hook 'go-mode-hook 'lsp-mode)
 

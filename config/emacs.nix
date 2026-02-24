@@ -1,12 +1,37 @@
 { pkgs, pkgs-unstable, lib, config, ... }:
 let
   # Runtime binaries expected to be on $PATH by our emacs config
+  # Runtime binaries expected to be on $PATH by our emacs config
   runtimeDeps = with pkgs; [
     rust-analyzer
     nodePackages.prettier
     python3Packages.sphinx
     ripgrep
   ];
+
+  # Tree-sitter grammars not in nixpkgs
+  tree-sitter-swift-grammar = pkgs.stdenv.mkDerivation {
+    pname = "tree-sitter-swift-grammar";
+    version = "0.7.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "alex-pinkus";
+      repo = "tree-sitter-swift";
+      rev = "0.7.1-with-generated-files";
+      hash = "sha256-jVZpnwpcQ3sXE4hXQIHKzQgEE13pqE3fGqdRMjb1AOQ=";
+    };
+    buildPhase = let
+      ext = if pkgs.stdenv.isDarwin then "dylib" else "so";
+      flag = if pkgs.stdenv.isDarwin then "-dynamiclib" else "-shared";
+    in ''
+      cc ${flag} -fPIC -o libtree-sitter-swift.${ext} -I src src/parser.c src/scanner.c
+    '';
+    installPhase = let
+      ext = if pkgs.stdenv.isDarwin then "dylib" else "so";
+    in ''
+      mkdir -p $out/lib
+      cp libtree-sitter-swift.${ext} $out/lib/
+    '';
+  };
 in
 {
   home.packages = runtimeDeps ++ [
@@ -84,6 +109,7 @@ in
         yaml-mode
         protobuf-mode
         protobuf-ts-mode
+        swift-ts-mode
         php-mode
         sml-mode
         terraform-mode
@@ -121,5 +147,7 @@ in
   # Ensure emacs temporary-file-directory exists (see emacs-init.el)
   home.file.".cache/emacs/.keep".text = "";
 
-  home.file.".emacs".source = ./emacs-init.el;
+  home.file.".emacs".text = builtins.readFile ./emacs-init.el + ''
+    (add-to-list 'treesit-extra-load-path "${tree-sitter-swift-grammar}/lib")
+  '';
 }
