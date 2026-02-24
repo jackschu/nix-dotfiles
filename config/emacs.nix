@@ -5,6 +5,7 @@ let
     rust-analyzer
     nodePackages.prettier
     python3Packages.sphinx
+    ripgrep
   ];
 in
 {
@@ -98,6 +99,9 @@ in
         # JS/TS
         prettier-js
         pkgs-unstable.emacsPackages.ws-butler
+
+        # Navigation
+        dumb-jump
 
         # Tools
         mmm-mode

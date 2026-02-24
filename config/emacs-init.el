@@ -536,6 +536,15 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
 ;; dont kill
 (setq confirm-kill-emacs 'y-or-n-p)
 
+;; dumb-jump (global fallback + local fallback behind lsp)
+(require 'dumb-jump)
+(setq dumb-jump-force-searcher 'rg)
+(remove-hook 'xref-backend-functions #'etags--xref-backend)
+(add-hook 'xref-backend-functions #'dumb-jump-xref-activate 100)
+(add-hook 'lsp-mode-hook
+          (lambda ()
+            (add-hook 'xref-backend-functions #'dumb-jump-xref-activate 100 t)))
+
 ;; zzz-mode
 (global-set-key (kbd "M-z") #'zzz-to-char)
 
