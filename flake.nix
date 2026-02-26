@@ -33,6 +33,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -47,6 +55,8 @@
       homebrew-core,
       homebrew-cask,
       plasma-manager,
+      llm-agents,
+      emacs-overlay,
       ...
     }:
     let
@@ -55,7 +65,7 @@
       linuxPkgs = import nixpkgs {
         system = linuxSystem;
         config.allowUnfree = true;
-        overlays = [ claude-code.overlays.default ];
+        overlays = [ claude-code.overlays.default emacs-overlay.overlays.default ];
       };
       inetutilsOverlay = final: prev: {
         inetutils = prev.inetutils.overrideAttrs (oldAttrs: rec {
@@ -69,7 +79,7 @@
       darwinPkgs = import nixpkgs {
         system = darwinSystem;
         config.allowUnfree = true;
-        overlays = [ claude-code.overlays.default inetutilsOverlay ];
+        overlays = [ claude-code.overlays.default inetutilsOverlay emacs-overlay.overlays.default ];
       };
       linuxPkgsUnstable = import nixpkgs-unstable {
         system = linuxSystem;
@@ -88,19 +98,28 @@
     {
       homeConfigurations."laptop" = home-manager.lib.homeManagerConfiguration {
         pkgs = linuxPkgs;
-        extraSpecialArgs = { pkgs-unstable = linuxPkgsUnstable; };
+        extraSpecialArgs = {
+          pkgs-unstable = linuxPkgsUnstable;
+          llm-agents-pkgs = llm-agents.packages.${linuxSystem};
+        };
         modules = linuxBaseModules ++ [ ./config/laptop.nix ];
       };
 
       homeConfigurations."desktop" = home-manager.lib.homeManagerConfiguration {
         pkgs = linuxPkgs;
-        extraSpecialArgs = { pkgs-unstable = linuxPkgsUnstable; };
+        extraSpecialArgs = {
+          pkgs-unstable = linuxPkgsUnstable;
+          llm-agents-pkgs = llm-agents.packages.${linuxSystem};
+        };
         modules = linuxBaseModules ++ [ ./config/desktop.nix ];
       };
 
       homeConfigurations."macbook_air" = home-manager.lib.homeManagerConfiguration {
         pkgs = darwinPkgs;
-        extraSpecialArgs = { pkgs-unstable = darwinPkgsUnstable; };
+        extraSpecialArgs = {
+          pkgs-unstable = darwinPkgsUnstable;
+          llm-agents-pkgs = llm-agents.packages.${darwinSystem};
+        };
         modules = commonModules ++ [ ./config/darwin.nix ];
       };
 

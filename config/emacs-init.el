@@ -562,3 +562,6 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
 
 (add-hook 'rust-mode-hook
           (lambda ()  (define-key rust-mode-map (kbd "M-?") 'lsp-find-references)))
+
+;; agent-shell
+(require 'agent-shell)

@@ -1,4 +1,4 @@
-{ pkgs, pkgs-unstable, lib, config, ... }:
+{ pkgs, pkgs-unstable, llm-agents-pkgs, lib, config, ... }:
 let
   # Runtime binaries expected to be on $PATH by our emacs config
   # Runtime binaries expected to be on $PATH by our emacs config
@@ -7,6 +7,7 @@ let
     nodePackages.prettier
     python3Packages.sphinx
     ripgrep
+    llm-agents-pkgs.claude-code-acp
   ];
 
   # Tree-sitter grammars not in nixpkgs
@@ -125,6 +126,11 @@ in
         # JS/TS
         prettier-js
         pkgs-unstable.emacsPackages.ws-butler
+
+        # AI / agent-shell
+        agent-shell
+        acp
+        shell-maker
 
         # Navigation
         dumb-jump
