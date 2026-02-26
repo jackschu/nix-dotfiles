@@ -1,9 +1,10 @@
-pkgs: with pkgs; let isX86 = pkgs.stdenv.hostPlatform.isx86; in {
+{ pkgs, llm-agents-pkgs }: with pkgs; let isX86 = pkgs.stdenv.hostPlatform.isx86; in {
   # Prefer using home.* for new packages (declaratively managed via home-manager)
   # NOTE: Emacs runtime deps (rust-analyzer, prettier, sphinx, etc.) are in config/emacs.nix
   home = {
     common = [
-      claude-code ripgrep tree yt-dlp
+      llm-agents-pkgs.claude-code llm-agents-pkgs.claude-code-acp
+      ripgrep tree yt-dlp
       # Fonts
       inter noto-fonts noto-fonts-cjk-sans noto-fonts-color-emoji
       nerd-fonts.jetbrains-mono

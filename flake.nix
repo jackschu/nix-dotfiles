@@ -8,7 +8,6 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    claude-code.url = "github:sadjow/claude-code-nix";
     sops-nix = {
       url = "git+https://github.com/jackschu/sops-nix?ref=fix-darwin-activation-order";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -48,7 +47,6 @@
       nixpkgs,
       nixpkgs-unstable,
       home-manager,
-      claude-code,
       sops-nix,
       nix-darwin,
       nix-homebrew,
@@ -65,7 +63,7 @@
       linuxPkgs = import nixpkgs {
         system = linuxSystem;
         config.allowUnfree = true;
-        overlays = [ claude-code.overlays.default emacs-overlay.overlays.default ];
+        overlays = [ emacs-overlay.overlays.default ];
       };
       inetutilsOverlay = final: prev: {
         inetutils = prev.inetutils.overrideAttrs (oldAttrs: rec {
@@ -79,7 +77,7 @@
       darwinPkgs = import nixpkgs {
         system = darwinSystem;
         config.allowUnfree = true;
-        overlays = [ claude-code.overlays.default inetutilsOverlay emacs-overlay.overlays.default ];
+        overlays = [ inetutilsOverlay emacs-overlay.overlays.default ];
       };
       linuxPkgsUnstable = import nixpkgs-unstable {
         system = linuxSystem;
@@ -130,7 +128,7 @@
           uid = 501;
         in nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
-          specialArgs = { inherit username uid; };
+          specialArgs = { inherit username uid; llm-agents-pkgs = llm-agents.packages.${darwinSystem}; };
           modules = [
             nix-homebrew.darwinModules.nix-homebrew
             {
@@ -155,7 +153,7 @@
 
       nixosConfigurations."dev_thinkpad" = nixpkgs.lib.nixosSystem {
         system = linuxSystem;
-        specialArgs = { username = "devbox"; userDescription = "Jack Schumann"; };
+        specialArgs = { username = "devbox"; userDescription = "Jack Schumann"; llm-agents-pkgs = llm-agents.packages.${linuxSystem}; };
         modules = [
           ./nixos/linux_configuration.nix
           ./nixos/dev_thinkpad
@@ -164,7 +162,7 @@
 
       nixosConfigurations."desktop" = nixpkgs.lib.nixosSystem {
         system = linuxSystem;
-        specialArgs = { username = "jackschu"; userDescription = "Jack S"; };
+        specialArgs = { username = "jackschu"; userDescription = "Jack S"; llm-agents-pkgs = llm-agents.packages.${linuxSystem}; };
         modules = [
           ./nixos/linux_configuration.nix
           ./nixos/desktop

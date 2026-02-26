@@ -2,11 +2,12 @@
   config,
   pkgs,
   lib,
+  llm-agents-pkgs,
   ...
 }:
 
 let
-  packages = import ../installed_packages.nix pkgs;
+  packages = import ../installed_packages.nix { inherit pkgs llm-agents-pkgs; };
 in
 {
   imports = [
