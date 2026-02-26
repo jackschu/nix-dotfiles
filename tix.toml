@@ -1,0 +1,7 @@
+[context.home-manager]
+paths = ["config/*.nix"]
+stubs = ["@home-manager"]
+
+[context.nixos]
+paths = ["nixos/**/*.nix"]
+stubs = ["@nixos"]

@@ -1,12 +1,12 @@
-{ pkgs, pkgs-unstable, lib, config, ... }:
+{ pkgs, pkgs-unstable, tix, lib, config, ... }:
 let
-  # Runtime binaries expected to be on $PATH by our emacs config
   # Runtime binaries expected to be on $PATH by our emacs config
   runtimeDeps = with pkgs; [
     rust-analyzer
     nodePackages.prettier
     python3Packages.sphinx
     ripgrep
+    tix.packages.${pkgs.system}.with-stubs
   ];
 
   # Tree-sitter grammars not in nixpkgs

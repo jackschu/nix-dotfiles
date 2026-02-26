@@ -33,6 +33,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    tix = {
+      url = "github:JRMurr/tix";
+    };
   };
 
   outputs =
@@ -47,6 +50,7 @@
       homebrew-core,
       homebrew-cask,
       plasma-manager,
+      tix,
       ...
     }:
     let
@@ -88,19 +92,19 @@
     {
       homeConfigurations."laptop" = home-manager.lib.homeManagerConfiguration {
         pkgs = linuxPkgs;
-        extraSpecialArgs = { pkgs-unstable = linuxPkgsUnstable; };
+        extraSpecialArgs = { pkgs-unstable = linuxPkgsUnstable; inherit tix; };
         modules = linuxBaseModules ++ [ ./config/laptop.nix ];
       };
 
       homeConfigurations."desktop" = home-manager.lib.homeManagerConfiguration {
         pkgs = linuxPkgs;
-        extraSpecialArgs = { pkgs-unstable = linuxPkgsUnstable; };
+        extraSpecialArgs = { pkgs-unstable = linuxPkgsUnstable; inherit tix; };
         modules = linuxBaseModules ++ [ ./config/desktop.nix ];
       };
 
       homeConfigurations."macbook_air" = home-manager.lib.homeManagerConfiguration {
         pkgs = darwinPkgs;
-        extraSpecialArgs = { pkgs-unstable = darwinPkgsUnstable; };
+        extraSpecialArgs = { pkgs-unstable = darwinPkgsUnstable; inherit tix; };
         modules = commonModules ++ [ ./config/darwin.nix ];
       };
 
