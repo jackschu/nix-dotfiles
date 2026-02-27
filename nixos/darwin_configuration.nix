@@ -1,4 +1,4 @@
-{ config, pkgs, username, uid, ... }:
+{ config, pkgs, username, uid, llm-agents-pkgs, ... }:
 
 let
   packages = import ../installed_packages.nix { inherit pkgs llm-agents-pkgs; };
