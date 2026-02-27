@@ -3,6 +3,20 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(agent-shell-transcript-file-path-function
+   (lambda nil
+     (let*
+         ((project-name
+           (file-name-nondirectory
+            (directory-file-name (agent-shell-cwd))))
+          (base
+           (if (fboundp 'xdg-data-home) (xdg-data-home)
+             "~/.local/share"))
+          (dir
+           (expand-file-name
+            (concat "agent-shell/transcripts/" project-name) base))
+          (filename (format-time-string "%F-%H-%M-%S.md")))
+       (expand-file-name filename dir))))
  '(clang-format-style
    "{BasedOnStyle: llvm, ColumnLimit: 120, IndentWidth: 4, AlwaysBreakTemplateDeclarations: Yes}")
  '(custom-safe-themes
