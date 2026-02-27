@@ -122,6 +122,7 @@ in
       background-opacity = 0.9;
       font-feature = ["-liga" "-dlig" "-calt"];
       desktop-notifications = false;
+      cursor-color = "#ff55ff";
       keybind = [
         # Clipboard
         "ctrl+shift+c=copy_to_clipboard"
