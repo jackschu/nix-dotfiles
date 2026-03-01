@@ -12,6 +12,18 @@ home-manager switch --flake .#<profile>
 sudo nixos-rebuild switch --flake .#<profile>
 ```
 
+### Bootstrap for Private Repo Access
+
+Systems with private flake inputs need to authenticate first. Use the `-bootstrap` variant:
+
+```bash
+# 1. Build bootstrap config (no private inputs needed)
+sudo nixos-rebuild switch --flake ~/.config/home-manager#<profile>-bootstrap --override-input agent-runtime path:./bootstrap-stub
+
+# 2. Switch to full config (auth now available)
+sudo nixos-rebuild switch --flake ~/.config/home-manager#<profile>
+```
+
 ### macOS Setup
 
 Update the darwin constants in `flake.nix` under `darwinConfigurations` for your machine:
@@ -32,6 +44,9 @@ curl -sSf -L https://install.lix.systems/lix | sh -s -- install
 
 # Apply home-manager configuration
 sudo home-manager switch --flake .#macbook_air
+
+# Bootstrap (required if using private flake inputs)
+sudo nix run nix-darwin -- switch --flake .#macbook_air-bootstrap --override-input agent-runtime path:./bootstrap-stub
 
 # Initial nix-darwin setup (system-level, requires sudo)
 sudo nix run nix-darwin -- switch --flake .#macbook_air

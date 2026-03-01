@@ -33,7 +33,7 @@
       inputs.home-manager.follows = "home-manager";
     };
     agent-runtime = {
-      url = "git+file:///home/jackschu/proj/agent_runtime";
+      url = "github:jackschu/agent_runtime";
     };
     llm-agents = {
       url = "github:numtide/llm-agents.nix";
@@ -96,6 +96,65 @@
         plasma-manager.homeModules.plasma-manager
         ./config/linux_common.nix
       ];
+
+      # Helper to create NixOS configs with optional agent-runtime
+      mkNixos = { name, username, userDescription, privateModules ? [] }:
+      let
+        sharedModules = [
+          sops-nix.nixosModules.sops
+          ./nixos/nix-private-repos.nix
+          ./nixos/linux_configuration.nix
+          ./nixos/${name}
+        ];
+      in
+        {
+        "${name}" = nixpkgs.lib.nixosSystem {
+          system = linuxSystem;
+          specialArgs = { inherit username userDescription; llm-agents-pkgs = llm-agents.packages.${linuxSystem}; };
+          modules = sharedModules ++ privateModules;
+        };
+        "${name}-bootstrap" = nixpkgs.lib.nixosSystem {
+          system = linuxSystem;
+          specialArgs = { inherit username userDescription; llm-agents-pkgs = llm-agents.packages.${linuxSystem}; };
+          modules = sharedModules;
+        };
+      };
+
+      # Helper to create Darwin configs with optional bootstrap
+      mkDarwin = { name, username, uid, privateModules ? [] }:
+        let
+          commonDarwinModules = [
+            sops-nix.darwinModules.sops
+            ./nixos/nix-private-repos.nix
+            nix-homebrew.darwinModules.nix-homebrew
+            {
+              nix-homebrew = {
+                enable = true;
+                user = username;
+                taps = {
+                  "homebrew/homebrew-core" = homebrew-core;
+                  "homebrew/homebrew-cask" = homebrew-cask;
+                };
+                mutableTaps = false;
+              };
+            }
+            ({ config, ... }: {
+              homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
+            })
+            ./nixos/darwin_configuration.nix
+          ];
+        in {
+          "${name}" = nix-darwin.lib.darwinSystem {
+            system = "aarch64-darwin";
+            specialArgs = { inherit username uid; llm-agents-pkgs = llm-agents.packages.${darwinSystem}; };
+            modules = commonDarwinModules ++ privateModules;
+          };
+          "${name}-bootstrap" = nix-darwin.lib.darwinSystem {
+            system = "aarch64-darwin";
+            specialArgs = { inherit username uid; llm-agents-pkgs = llm-agents.packages.${darwinSystem}; };
+            modules = commonDarwinModules;
+          };
+        };
     in
     {
       homeConfigurations."laptop" = home-manager.lib.homeManagerConfiguration {
@@ -125,54 +184,30 @@
         modules = commonModules ++ [ ./config/darwin.nix ];
       };
 
-      darwinConfigurations."macbook_air" =
-        let
-          # Darwin user constants — update these for your machine
-          username = "jackschumann";
-          uid = 501;
-        in nix-darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
-          specialArgs = { inherit username uid; llm-agents-pkgs = llm-agents.packages.${darwinSystem}; };
-          modules = [
-            nix-homebrew.darwinModules.nix-homebrew
-            {
-              nix-homebrew = {
-                enable = true;
-                user = username;
-                # Enable x86_64 Homebrew prefix (/usr/local) for Intel-only packages
-                # enableRosetta = true;
-                taps = {
-                  "homebrew/homebrew-core" = homebrew-core;
-                  "homebrew/homebrew-cask" = homebrew-cask;
-                };
-                mutableTaps = false;
-              };
-            }
-            ({ config, ... }: {
-              homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
-            })
-            ./nixos/darwin_configuration.nix
+      darwinConfigurations = mkDarwin {
+        name = "macbook_air";
+        username = "jackschumann";
+        uid = 501;
+      };
+
+      nixosConfigurations =
+        (mkNixos {
+          name = "dev_thinkpad";
+          username = "devbox";
+          userDescription = "Jack Schumann";
+          privateModules = [
+            agent-runtime.nixosModules.host
+            ./nixos/dev_thinkpad/agent-runtime.nix
           ];
-        };
-
-      nixosConfigurations."dev_thinkpad" = nixpkgs.lib.nixosSystem {
-        system = linuxSystem;
-        specialArgs = { username = "devbox"; userDescription = "Jack Schumann"; llm-agents-pkgs = llm-agents.packages.${linuxSystem}; };
-        modules = [
-          agent-runtime.nixosModules.host
-          ./nixos/linux_configuration.nix
-          ./nixos/dev_thinkpad
-        ];
-      };
-
-      nixosConfigurations."desktop" = nixpkgs.lib.nixosSystem {
-        system = linuxSystem;
-        specialArgs = { username = "jackschu"; userDescription = "Jack S"; llm-agents-pkgs = llm-agents.packages.${linuxSystem}; };
-        modules = [
-          agent-runtime.nixosModules.host
-          ./nixos/linux_configuration.nix
-          ./nixos/desktop
-        ];
-      };
+        })
+        // (mkNixos {
+          name = "desktop";
+          username = "jackschu";
+          userDescription = "Jack S";
+          privateModules = [
+            agent-runtime.nixosModules.host
+            ./nixos/desktop/agent-runtime.nix
+          ];
+        });
     };
 }

@@ -3,6 +3,7 @@
   # NOTE: Emacs runtime deps (rust-analyzer, prettier, sphinx, etc.) are in config/emacs.nix
   home = {
     common = [
+      llm-agents-pkgs.opencode
       llm-agents-pkgs.claude-code llm-agents-pkgs.claude-code-acp
       ripgrep tree yt-dlp
       # Fonts

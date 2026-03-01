@@ -7,17 +7,17 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1771365384,
-        "narHash": "sha256-vVTtQOftKcH/dmSnYqIt5Mg7D1TeZM8m2sVMj1HpPQM=",
-        "ref": "refs/heads/microvm-nix",
-        "rev": "c7516ea4caf2f90d36570ca3f924229be0d61ea8",
-        "revCount": 2,
-        "type": "git",
-        "url": "file:///home/jackschu/proj/agent_runtime"
+        "lastModified": 1772397032,
+        "narHash": "sha256-eeM7Beg2fJjqOTcH9NZQnz2CJjBQFVbRWyjWGPXoy1k=",
+        "owner": "jackschu",
+        "repo": "agent_runtime",
+        "rev": "d636fbec8d62ff1b0b496d6f0b16b07b2b5a32a9",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/jackschu/proj/agent_runtime"
+        "owner": "jackschu",
+        "repo": "agent_runtime",
+        "type": "github"
       }
     },
     "blueprint": {

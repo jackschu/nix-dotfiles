@@ -27,10 +27,5 @@
     wantedBy = [ "default.target" ];
   };
 
-  services.agent-microvm = {
-    enable = true;
-    externalInterface = "enp2s0";
-  };
-
   system.stateVersion = "23.05";
 }
