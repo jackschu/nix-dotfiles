@@ -137,6 +137,9 @@ in
         "alt+seven=goto_tab:7"
         "alt+eight=goto_tab:8"
         "alt+nine=goto_tab:9"
+        # Disabled shortcuts
+        "ctrl+tab=unbind"
+        "ctrl+enter=unbind"
       ];
     };
   };
