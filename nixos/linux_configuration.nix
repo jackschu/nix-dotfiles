@@ -1,7 +1,8 @@
-{ config, pkgs, username, userDescription, ... }:
+{ config, lib, pkgs, username, userDescription, llm-agents-pkgs, ... }:
 
 let
-  packages = import ../installed_packages.nix pkgs;
+  packages = import ../installed_packages.nix { inherit pkgs llm-agents-pkgs; };
+  isX86 = pkgs.stdenv.hostPlatform.isx86;
 in
 {
   imports = [ ./base_configuration.nix ];
@@ -34,9 +35,9 @@ in
   services.displayManager.sddm.wayland.enable = true;
   services.desktopManager.plasma6.enable = true;
 
-  # Printing
+  # Printing (drivers are x86-only)
   services.printing.enable = true;
-  services.printing.drivers = packages.system.linuxPrinting;
+  services.printing.drivers = lib.mkIf isX86 packages.system.linuxPrinting;
 
   # Audio
   services.pulseaudio.enable = false;

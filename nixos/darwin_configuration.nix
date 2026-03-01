@@ -1,7 +1,7 @@
-{ config, pkgs, username, uid, ... }:
+{ config, pkgs, username, uid, llm-agents-pkgs, ... }:
 
 let
-  packages = import ../installed_packages.nix pkgs;
+  packages = import ../installed_packages.nix { inherit pkgs llm-agents-pkgs; };
 in
 {
   imports = [
@@ -30,6 +30,9 @@ in
   # Dark mode
   system.defaults.NSGlobalDomain.AppleInterfaceStyle = "Dark";
 
+  # Disable autocorrect
+  system.defaults.NSGlobalDomain.NSAutomaticSpellingCorrectionEnabled = false;
+
   # Show keyboard brightness in Control Center
   system.defaults.CustomUserPreferences."com.apple.controlcenter" = {
     "NSStatusItem Visible KeyboardBrightness" = true;
@@ -50,6 +53,7 @@ in
       ctrl - 2 : open -a "Google Chrome"
       ctrl - 3 : open -a "Discord"
       ctrl - 4 : open -a "Spotify"
+      ctrl - 5 : open -a "Messages"
     '';
   };
 
@@ -57,6 +61,7 @@ in
   homebrew = {
     enable = true;
     onActivation.cleanup = "zap";
+    brews = packages.brew.formulas;
     casks = packages.brew.casks;
   };
 }

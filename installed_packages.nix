@@ -1,19 +1,22 @@
-pkgs: with pkgs; {
+{ pkgs, llm-agents-pkgs }: with pkgs; let isX86 = pkgs.stdenv.hostPlatform.isx86; in {
+  # Prefer using home.* for new packages (declaratively managed via home-manager)
+  # NOTE: Emacs runtime deps (rust-analyzer, prettier, sphinx, etc.) are in config/emacs.nix
   home = {
     common = [
-      claude-code ripgrep tree
+      llm-agents-pkgs.claude-code llm-agents-pkgs.claude-code-acp
+      ripgrep tree yt-dlp
       # Fonts
       inter noto-fonts noto-fonts-cjk-sans noto-fonts-color-emoji
       nerd-fonts.jetbrains-mono
-      # Apps
-      discord spotify
     ];
-    linux = [ wl-clipboard kdePackages.kdbusaddons ];
+    linux = [ wl-clipboard kdePackages.kdbusaddons ] ++ lib.optionals isX86 [
+      zoom-us discord spotify
+    ];
   };
 
   system = {
     common = [
-      home-manager fd bottom gnuplot emacs-nox
+      home-manager fd bottom gnuplot emacs-nox git
       ispell nixfmt silver-searcher nodejs node2nix
     ];
     linux = [ perf gparted e2fsprogs dosfstools ntfsprogs ];
@@ -31,14 +34,17 @@ pkgs: with pkgs; {
     ];
     linux = [
       # GUI apps
-      pavucontrol zoom-us firefox
+      pavucontrol firefox
       # Linux-specific tools
-      xclip steam-run patchelf emscripten docker
+      xclip patchelf emscripten docker
       # Graphics / Wayland libs
       libGL libxkbcommon wayland
       xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr
+    ] ++ lib.optionals isX86 [
+      steam-run
     ];
   };
 
-  brew.casks = [ "google-chrome" "ghostty" ];
+  brew.formulas = [ "lima" ];
+  brew.casks = [ "google-chrome" "ghostty" "discord" "spotify" ];
 }

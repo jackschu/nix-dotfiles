@@ -58,6 +58,12 @@ sudo nixos-rebuild switch --flake .#<profile>
 
 The `<profile>` should match the NixOS configuration defined in `flake.nix` (e.g., `dev_thinkpad`).
 
+## Patterns
+
+- To ensure a directory exists under `$HOME`, use `home.file."path/to/dir/.keep".text = "";`
+- When a nix package is missing from stable nixpkgs, check `nixpkgs-unstable` before resorting to building from source. The flake already has it as an input (e.g. `pkgs-unstable.emacsPackages.*`).
+- To check nixpkgs-unstable for a package: `nix eval --json 'github:nixos/nixpkgs/nixpkgs-unstable#<pkg>.pname'`. Do NOT use `nixpkgs-unstable#...` (flake registry) — it doesn't exist in the registry.
+
 ## Key Differences
 
 - **home-manager**: User packages, dotfiles, shell config, services like easyeffects

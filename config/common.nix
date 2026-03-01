@@ -2,17 +2,19 @@
   config,
   pkgs,
   lib,
+  llm-agents-pkgs,
   ...
 }:
 
 let
-  packages = import ../installed_packages.nix pkgs;
+  packages = import ../installed_packages.nix { inherit pkgs llm-agents-pkgs; };
 in
 {
   imports = [
     ./sops.nix
     ./gpg.nix
     ./git.nix
+    ./emacs.nix
   ];
 
   # Common configuration for all machines
@@ -120,6 +122,7 @@ in
       background-opacity = 0.9;
       font-feature = ["-liga" "-dlig" "-calt"];
       desktop-notifications = false;
+      cursor-color = "#ff55ff";
       keybind = [
         # Clipboard
         "ctrl+shift+c=copy_to_clipboard"

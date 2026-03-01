@@ -1,4 +1,4 @@
-# home-manager config
+# nix-dotfiles
 
 ## Applying Changes
 
@@ -41,6 +41,31 @@ darwin-rebuild switch --flake .#macbook_air
 ```
 
 Use `laptop` or `desktop` for home-manager profiles. For NixOS profiles use `dev_thinkpad` or `desktop`. For nix-darwin profiles use `macbook_air`.
+
+## Emacs Customization
+
+Emacs settings saved via `M-x customize` are kept separate from the main init file
+since `custom-save-all` rewrites the file from scratch and would destroy any hand-written content.
+
+### How it works
+
+- `config/emacs-custom.el` — the canonical custom settings, committed to this repo
+- `~/.emacs-custom.el` — writable working copy, seeded from the repo on every `home-manager switch`
+
+On each `home-manager switch`, the repo version overwrites `~/.emacs-custom.el` — the repo is source of truth.
+
+### Persisting interactive customizations
+
+After using `customize-face`, `customize-variable`, etc., Emacs will display a reminder in the minibuffer. To commit those changes back to the repo:
+
+```bash
+sync-emacs-custom   # copies ~/.emacs-custom.el → config/emacs-custom.el
+git add config/emacs-custom.el && git commit
+```
+
+### What not to put in the custom file
+
+Keep settings in `emacs-init.el` when possible — the custom file is machine-generated and comments are stripped on every save, so youll need to use configures 'add comment' ability (select [State] and then its an option).
 
 ## Secrets
 

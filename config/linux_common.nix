@@ -2,12 +2,15 @@
   config,
   pkgs,
   lib,
+  llm-agents-pkgs,
   ...
 }:
 
 let
-  packages = import ../installed_packages.nix pkgs;
-  browser = "google-chrome.desktop";
+  packages = import ../installed_packages.nix { inherit pkgs llm-agents-pkgs; };
+  isX86 = pkgs.stdenv.hostPlatform.isx86;
+  browserPkg = if isX86 then pkgs.google-chrome else pkgs.chromium;
+  browser = if isX86 then "google-chrome.desktop" else "chromium-browser.desktop";
 in
 {
   imports = [
@@ -55,7 +58,7 @@ in
 
   programs.chromium = {
     enable = true;
-    package = pkgs.google-chrome;
+    package = browserPkg;
     commandLineArgs = [
       "--enable-features=TouchpadOverscrollHistoryNavigation"
     ];
