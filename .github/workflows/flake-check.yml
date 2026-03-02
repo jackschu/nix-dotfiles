@@ -1,0 +1,47 @@
+name: Flake Check
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  matrix-checks:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: home linux laptop
+            runner: ubuntu-latest
+            command: nix build .#homeConfigurations.laptop.activationPackage --override-input agent-runtime path:./bootstrap-stub --show-trace --print-build-logs
+          - name: home linux desktop
+            runner: ubuntu-latest
+            command: nix build .#homeConfigurations.desktop.activationPackage --override-input agent-runtime path:./bootstrap-stub --show-trace --print-build-logs
+          - name: home darwin macbook_air
+            runner: macos-14
+            command: nix build .#homeConfigurations.macbook_air.activationPackage --override-input agent-runtime path:./bootstrap-stub --show-trace --print-build-logs
+          - name: nixos dev_thinkpad bootstrap
+            runner: ubuntu-latest
+            command: nix build .#nixosConfigurations.dev_thinkpad-bootstrap.config.system.build.toplevel --override-input agent-runtime path:./bootstrap-stub --show-trace --print-build-logs
+          - name: nixos desktop bootstrap
+            runner: ubuntu-latest
+            command: nix build .#nixosConfigurations.desktop-bootstrap.config.system.build.toplevel --override-input agent-runtime path:./bootstrap-stub --show-trace --print-build-logs
+          - name: darwin macbook_air bootstrap
+            runner: macos-14
+            command: nix build .#darwinConfigurations.macbook_air-bootstrap.system --override-input agent-runtime path:./bootstrap-stub --show-trace --print-build-logs
+          - name: global flake check
+            runner: ubuntu-latest
+            command: nix flake check --override-input agent-runtime path:./bootstrap-stub --show-trace --print-build-logs
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v17
+
+      - name: Run check
+        run: ${{ matrix.command }}
