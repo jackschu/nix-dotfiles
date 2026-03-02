@@ -106,7 +106,7 @@
       let
         sharedModules = [
           sops-nix.nixosModules.sops
-          ./nixos/nix-private-repos.nix
+          ./nixos/nix_private_repos.nix
           ./nixos/linux_configuration.nix
           ./nixos/${name}
         ];
@@ -129,7 +129,7 @@
         let
           commonDarwinModules = [
             sops-nix.darwinModules.sops
-            ./nixos/nix-private-repos.nix
+            ./nixos/nix_private_repos.nix
             nix-homebrew.darwinModules.nix-homebrew
             {
               nix-homebrew = {
