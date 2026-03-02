@@ -43,6 +43,9 @@
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    tix = {
+      url = "github:JRMurr/tix";
+    };
   };
 
   outputs =
@@ -59,6 +62,7 @@
       agent-runtime,
       llm-agents,
       emacs-overlay,
+      tix,
       ...
     }:
     let
@@ -162,6 +166,7 @@
         extraSpecialArgs = {
           pkgs-unstable = linuxPkgsUnstable;
           llm-agents-pkgs = llm-agents.packages.${linuxSystem};
+          inherit tix;
         };
         modules = linuxBaseModules ++ [ ./config/laptop.nix ];
       };
@@ -171,6 +176,7 @@
         extraSpecialArgs = {
           pkgs-unstable = linuxPkgsUnstable;
           llm-agents-pkgs = llm-agents.packages.${linuxSystem};
+          inherit tix;
         };
         modules = linuxBaseModules ++ [ ./config/desktop.nix ];
       };
@@ -180,6 +186,7 @@
         extraSpecialArgs = {
           pkgs-unstable = darwinPkgsUnstable;
           llm-agents-pkgs = llm-agents.packages.${darwinSystem};
+          inherit tix;
         };
         modules = commonModules ++ [ ./config/darwin.nix ];
       };

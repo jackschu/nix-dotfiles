@@ -333,7 +333,6 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
 
 ;; lsp stuff
 (require 'lsp)
-(add-hook 'nix-mode-hook 'lsp)
 (add-hook 'rust-mode-hook #'lsp-deferred)
 (add-hook 'rust-ts-mode-hook #'lsp-deferred)
 
@@ -346,16 +345,17 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
 )
 
 
-(use-package lsp-nix
-  :ensure lsp-mode
-  :after (lsp-mode)
-  :demand t
-  :custom
-  (lsp-nix-nil-formatter ["nixpkgs-fmt"]))
-
-(use-package nix-mode
-  :hook (nix-mode . lsp-deferred)
-  :ensure t)
+;; tix - nix type checker LSP (replaces nil)
+(with-eval-after-load 'lsp-mode
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-stdio-connection '("tix" "lsp"))
+    :major-modes '(nix-mode nix-ts-mode)
+    :server-id 'tix-lsp
+    :priority 1))
+  (add-to-list 'lsp-language-id-configuration '(nix-ts-mode . "nix"))
+  ;; disable nil (auto-registered by lsp-nix)
+  (setq lsp-nix-nil-server-path "false"))
 
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
@@ -529,8 +529,8 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
 
 ;; nix stuffn
 (add-to-list 'auto-mode-alist '("\\.nix\\'" . nix-ts-mode))
-(add-hook 'nix-mode-hook 'lsp-mode)
-(add-hook 'nix-ts-mode-hook 'lsp-mode)
+(add-hook 'nix-mode-hook #'lsp-deferred)
+(add-hook 'nix-ts-mode-hook #'lsp-deferred)
 
 ;; swift
 (add-to-list 'auto-mode-alist '("\\.swift\\'" . swift-ts-mode))

@@ -1,6 +1,5 @@
-{ pkgs, pkgs-unstable, llm-agents-pkgs, lib, config, ... }:
+{ pkgs, pkgs-unstable, llm-agents-pkgs, tix, lib, config, ... }:
 let
-  # Runtime binaries expected to be on $PATH by our emacs config
   # Runtime binaries expected to be on $PATH by our emacs config
   runtimeDeps = with pkgs; [
     rust-analyzer
@@ -8,6 +7,7 @@ let
     python3Packages.sphinx
     ripgrep
     llm-agents-pkgs.claude-code-acp
+    tix.packages.${pkgs.system}.with-stubs
   ];
 
   # Tree-sitter grammars not in nixpkgs
