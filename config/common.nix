@@ -28,6 +28,20 @@ in
     EDITOR = "emacs --no-desktop";
   };
 
+  xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
+    "$schema" = "https://opencode.ai/config.json";
+    permission = {
+      read = "ask";
+      edit = "ask";
+      grep = "ask";
+      bash = "ask";
+      webfetch = "ask";
+      websearch = "ask";
+      codesearch = "ask";
+      external_directory = "ask";
+    };
+  };
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 

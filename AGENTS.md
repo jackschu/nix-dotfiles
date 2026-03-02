@@ -58,6 +58,10 @@ sudo nixos-rebuild switch --flake .#<profile>
 
 The `<profile>` should match the NixOS configuration defined in `flake.nix` (e.g., `dev_thinkpad`).
 
+## General rules
+- Do not format existing code unless formatting is the primary task.
+- Prefer underscores to hyphens for filenames
+
 ## Patterns
 
 - To ensure a directory exists under `$HOME`, use `home.file."path/to/dir/.keep".text = "";`
