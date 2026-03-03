@@ -6,7 +6,7 @@
     common = [
       llm-agents-pkgs.opencode
       llm-agents-pkgs.claude-code llm-agents-pkgs.claude-code-acp
-      dolt
+      pkgs-unstable.dolt
       llm-agents-pkgs.beads
       ripgrep tree yt-dlp
       # Fonts
