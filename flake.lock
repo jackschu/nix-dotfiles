@@ -405,6 +405,22 @@
     },
     "nixpkgs_4": {
       "locked": {
+        "lastModified": 1772479524,
+        "narHash": "sha256-u7nCaNiMjqvKpE+uZz9hE7pgXXTmm5yvdtFaqzSzUQI=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "4215e62dc2cd3bc705b0a423b9719ff6be378a43",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_5": {
+      "locked": {
         "lastModified": 1771008912,
         "narHash": "sha256-gf2AmWVTs8lEq7z/3ZAsgnZDhWIckkb+ZnAo5RzSxJg=",
         "owner": "nixos",
@@ -456,6 +472,7 @@
         "nixpkgs-unstable": "nixpkgs-unstable",
         "plasma-manager": "plasma-manager",
         "sops-nix": "sops-nix",
+        "task_task": "task_task",
         "tix": "tix"
       }
     },
@@ -562,13 +579,31 @@
         "type": "github"
       }
     },
+    "task_task": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_4"
+      },
+      "locked": {
+        "lastModified": 1772520684,
+        "narHash": "sha256-mmoIotGUfD73qWGfAOaeeRdg+gdf6+cdqUR3AznVFEg=",
+        "owner": "jackschu",
+        "repo": "task-task",
+        "rev": "a6c3b345503f80b8ab3bc6fadc7345e06b4f13b2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jackschu",
+        "repo": "task-task",
+        "type": "github"
+      }
+    },
     "tix": {
       "inputs": {
         "crane": "crane",
         "flake-compat": "flake-compat",
         "flake-utils": "flake-utils_2",
         "home-manager": "home-manager_2",
-        "nixpkgs": "nixpkgs_4",
+        "nixpkgs": "nixpkgs_5",
         "rust-overlay": "rust-overlay"
       },
       "locked": {

@@ -1,7 +1,7 @@
-{ config, lib, pkgs, pkgs-unstable, username, userDescription, llm-agents-pkgs, ... }:
+{ config, lib, pkgs, pkgs-unstable, username, userDescription, llm-agents-pkgs, task_task, ... }:
 
 let
-  packages = import ../installed_packages.nix { inherit pkgs pkgs-unstable llm-agents-pkgs; };
+  packages = import ../installed_packages.nix { inherit pkgs pkgs-unstable llm-agents-pkgs task_task; };
   isX86 = pkgs.stdenv.hostPlatform.isx86;
 in
 {

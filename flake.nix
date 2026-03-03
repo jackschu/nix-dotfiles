@@ -46,6 +46,9 @@
     tix = {
       url = "github:JRMurr/tix";
     };
+    task_task = {
+      url = "github:jackschu/task-task";
+    };
   };
 
   outputs =
@@ -63,6 +66,7 @@
       llm-agents,
       emacs-overlay,
       tix,
+      task_task,
       ...
     }:
     let
@@ -124,7 +128,7 @@
           "${name}" = nixpkgs.lib.nixosSystem {
             system = linuxSystem;
             specialArgs = {
-              inherit username userDescription;
+              inherit username userDescription task_task;
               pkgs-unstable = linuxPkgsUnstable;
               llm-agents-pkgs = llm-agents.packages.${linuxSystem};
             };
@@ -133,7 +137,7 @@
           "${name}-bootstrap" = nixpkgs.lib.nixosSystem {
             system = linuxSystem;
             specialArgs = {
-              inherit username userDescription;
+              inherit username userDescription task_task;
               pkgs-unstable = linuxPkgsUnstable;
               llm-agents-pkgs = llm-agents.packages.${linuxSystem};
             };
@@ -178,7 +182,7 @@
           "${name}" = nix-darwin.lib.darwinSystem {
             system = "aarch64-darwin";
             specialArgs = {
-              inherit username uid;
+              inherit username uid task_task;
               pkgs-unstable = darwinPkgsUnstable;
               llm-agents-pkgs = llm-agents.packages.${darwinSystem};
             };
@@ -187,7 +191,7 @@
           "${name}-bootstrap" = nix-darwin.lib.darwinSystem {
             system = "aarch64-darwin";
             specialArgs = {
-              inherit username uid;
+              inherit username uid task_task;
               pkgs-unstable = darwinPkgsUnstable;
               llm-agents-pkgs = llm-agents.packages.${darwinSystem};
             };
@@ -201,7 +205,7 @@
         extraSpecialArgs = {
           pkgs-unstable = linuxPkgsUnstable;
           llm-agents-pkgs = llm-agents.packages.${linuxSystem};
-          inherit tix;
+          inherit tix task_task;
         };
         modules = linuxBaseModules ++ [ ./config/laptop.nix ];
       };
@@ -211,7 +215,7 @@
         extraSpecialArgs = {
           pkgs-unstable = linuxPkgsUnstable;
           llm-agents-pkgs = llm-agents.packages.${linuxSystem};
-          inherit tix;
+          inherit tix task_task;
         };
         modules = linuxBaseModules ++ [ ./config/desktop.nix ];
       };
@@ -221,7 +225,7 @@
         extraSpecialArgs = {
           pkgs-unstable = darwinPkgsUnstable;
           llm-agents-pkgs = llm-agents.packages.${darwinSystem};
-          inherit tix;
+          inherit tix task_task;
         };
         modules = commonModules ++ [ ./config/darwin.nix ];
       };

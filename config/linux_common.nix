@@ -4,11 +4,12 @@
   pkgs-unstable,
   lib,
   llm-agents-pkgs,
+  task_task,
   ...
 }:
 
 let
-  packages = import ../installed_packages.nix { inherit pkgs pkgs-unstable llm-agents-pkgs; };
+  packages = import ../installed_packages.nix { inherit pkgs pkgs-unstable llm-agents-pkgs task_task; };
   isX86 = pkgs.stdenv.hostPlatform.isx86;
   browserPkg = if isX86 then pkgs.google-chrome else pkgs.chromium;
   browser = if isX86 then "google-chrome.desktop" else "chromium-browser.desktop";
