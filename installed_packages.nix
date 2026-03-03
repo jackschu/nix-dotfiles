@@ -6,8 +6,6 @@
     common = [
       llm-agents-pkgs.opencode
       llm-agents-pkgs.claude-code llm-agents-pkgs.claude-code-acp
-      pkgs-unstable.dolt
-      llm-agents-pkgs.beads
       ripgrep tree yt-dlp
       # Fonts
       inter noto-fonts noto-fonts-cjk-sans noto-fonts-color-emoji

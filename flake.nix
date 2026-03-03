@@ -82,18 +82,6 @@
           };
         });
       };
-      doltOverlay = final: prev: {
-        dolt = prev.dolt.overrideAttrs (oldAttrs: rec {
-          version = "1.83.0";
-          src = prev.fetchFromGitHub {
-            owner = "dolthub";
-            repo = "dolt";
-            tag = "v${version}";
-            hash = "sha256-rEImycuuuX3IAPnkCnA1n6mjauzqQR7Z8eVgkx48Pig=";
-          };
-          vendorHash = "sha256-599NDn2SXvKwwaAzpgw/zp8703uG62rF1jlS7FYUYFo=";
-        });
-      };
       darwinPkgs = import nixpkgs {
         system = darwinSystem;
         config.allowUnfree = true;
@@ -104,11 +92,9 @@
       };
       linuxPkgsUnstable = import nixpkgs-unstable {
         system = linuxSystem;
-        overlays = [ doltOverlay ];
       };
       darwinPkgsUnstable = import nixpkgs-unstable {
         system = darwinSystem;
-        overlays = [ doltOverlay ];
       };
       commonModules = [
         sops-nix.homeManagerModules.sops
