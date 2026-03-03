@@ -82,16 +82,33 @@
           };
         });
       };
+      doltOverlay = final: prev: {
+        dolt = prev.dolt.overrideAttrs (oldAttrs: rec {
+          version = "1.83.0";
+          src = prev.fetchFromGitHub {
+            owner = "dolthub";
+            repo = "dolt";
+            tag = "v${version}";
+            hash = "sha256-rEImycuuuX3IAPnkCnA1n6mjauzqQR7Z8eVgkx48Pig=";
+          };
+          vendorHash = "sha256-599NDn2SXvKwwaAzpgw/zp8703uG62rF1jlS7FYUYFo=";
+        });
+      };
       darwinPkgs = import nixpkgs {
         system = darwinSystem;
         config.allowUnfree = true;
-        overlays = [ inetutilsOverlay emacs-overlay.overlays.default ];
+        overlays = [
+          inetutilsOverlay
+          emacs-overlay.overlays.default
+        ];
       };
       linuxPkgsUnstable = import nixpkgs-unstable {
         system = linuxSystem;
+        overlays = [ doltOverlay ];
       };
       darwinPkgsUnstable = import nixpkgs-unstable {
         system = darwinSystem;
+        overlays = [ doltOverlay ];
       };
       commonModules = [
         sops-nix.homeManagerModules.sops
@@ -102,30 +119,50 @@
       ];
 
       # Helper to create NixOS configs with optional agent-runtime
-      mkNixos = { name, username, userDescription, privateModules ? [] }:
-      let
-        sharedModules = [
-          sops-nix.nixosModules.sops
-          ./nixos/nix_private_repos.nix
-          ./nixos/linux_configuration.nix
-          ./nixos/${name}
-        ];
-      in
+      mkNixos =
         {
-        "${name}" = nixpkgs.lib.nixosSystem {
-          system = linuxSystem;
-          specialArgs = { inherit username userDescription; pkgs-unstable = linuxPkgsUnstable; llm-agents-pkgs = llm-agents.packages.${linuxSystem}; };
-          modules = sharedModules ++ privateModules;
+          name,
+          username,
+          userDescription,
+          privateModules ? [ ],
+        }:
+        let
+          sharedModules = [
+            sops-nix.nixosModules.sops
+            ./nixos/nix_private_repos.nix
+            ./nixos/linux_configuration.nix
+            ./nixos/${name}
+          ];
+        in
+        {
+          "${name}" = nixpkgs.lib.nixosSystem {
+            system = linuxSystem;
+            specialArgs = {
+              inherit username userDescription;
+              pkgs-unstable = linuxPkgsUnstable;
+              llm-agents-pkgs = llm-agents.packages.${linuxSystem};
+            };
+            modules = sharedModules ++ privateModules;
+          };
+          "${name}-bootstrap" = nixpkgs.lib.nixosSystem {
+            system = linuxSystem;
+            specialArgs = {
+              inherit username userDescription;
+              pkgs-unstable = linuxPkgsUnstable;
+              llm-agents-pkgs = llm-agents.packages.${linuxSystem};
+            };
+            modules = sharedModules;
+          };
         };
-        "${name}-bootstrap" = nixpkgs.lib.nixosSystem {
-          system = linuxSystem;
-          specialArgs = { inherit username userDescription; pkgs-unstable = linuxPkgsUnstable; llm-agents-pkgs = llm-agents.packages.${linuxSystem}; };
-          modules = sharedModules;
-        };
-      };
 
       # Helper to create Darwin configs with optional bootstrap
-      mkDarwin = { name, username, uid, privateModules ? [] }:
+      mkDarwin =
+        {
+          name,
+          username,
+          uid,
+          privateModules ? [ ],
+        }:
         let
           commonDarwinModules = [
             sops-nix.darwinModules.sops
@@ -142,20 +179,32 @@
                 mutableTaps = false;
               };
             }
-            ({ config, ... }: {
-              homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
-            })
+            (
+              { config, ... }:
+              {
+                homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
+              }
+            )
             ./nixos/darwin_configuration.nix
           ];
-        in {
+        in
+        {
           "${name}" = nix-darwin.lib.darwinSystem {
             system = "aarch64-darwin";
-            specialArgs = { inherit username uid; pkgs-unstable = darwinPkgsUnstable; llm-agents-pkgs = llm-agents.packages.${darwinSystem}; };
+            specialArgs = {
+              inherit username uid;
+              pkgs-unstable = darwinPkgsUnstable;
+              llm-agents-pkgs = llm-agents.packages.${darwinSystem};
+            };
             modules = commonDarwinModules ++ privateModules;
           };
           "${name}-bootstrap" = nix-darwin.lib.darwinSystem {
             system = "aarch64-darwin";
-            specialArgs = { inherit username uid; pkgs-unstable = darwinPkgsUnstable; llm-agents-pkgs = llm-agents.packages.${darwinSystem}; };
+            specialArgs = {
+              inherit username uid;
+              pkgs-unstable = darwinPkgsUnstable;
+              llm-agents-pkgs = llm-agents.packages.${darwinSystem};
+            };
             modules = commonDarwinModules;
           };
         };
