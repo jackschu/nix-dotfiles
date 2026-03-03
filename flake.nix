@@ -114,12 +114,12 @@
         {
         "${name}" = nixpkgs.lib.nixosSystem {
           system = linuxSystem;
-          specialArgs = { inherit username userDescription; llm-agents-pkgs = llm-agents.packages.${linuxSystem}; };
+          specialArgs = { inherit username userDescription; pkgs-unstable = linuxPkgsUnstable; llm-agents-pkgs = llm-agents.packages.${linuxSystem}; };
           modules = sharedModules ++ privateModules;
         };
         "${name}-bootstrap" = nixpkgs.lib.nixosSystem {
           system = linuxSystem;
-          specialArgs = { inherit username userDescription; llm-agents-pkgs = llm-agents.packages.${linuxSystem}; };
+          specialArgs = { inherit username userDescription; pkgs-unstable = linuxPkgsUnstable; llm-agents-pkgs = llm-agents.packages.${linuxSystem}; };
           modules = sharedModules;
         };
       };
@@ -150,12 +150,12 @@
         in {
           "${name}" = nix-darwin.lib.darwinSystem {
             system = "aarch64-darwin";
-            specialArgs = { inherit username uid; llm-agents-pkgs = llm-agents.packages.${darwinSystem}; };
+            specialArgs = { inherit username uid; pkgs-unstable = darwinPkgsUnstable; llm-agents-pkgs = llm-agents.packages.${darwinSystem}; };
             modules = commonDarwinModules ++ privateModules;
           };
           "${name}-bootstrap" = nix-darwin.lib.darwinSystem {
             system = "aarch64-darwin";
-            specialArgs = { inherit username uid; llm-agents-pkgs = llm-agents.packages.${darwinSystem}; };
+            specialArgs = { inherit username uid; pkgs-unstable = darwinPkgsUnstable; llm-agents-pkgs = llm-agents.packages.${darwinSystem}; };
             modules = commonDarwinModules;
           };
         };

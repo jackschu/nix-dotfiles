@@ -1,10 +1,13 @@
-{ pkgs, llm-agents-pkgs }: with pkgs; let isX86 = pkgs.stdenv.hostPlatform.isx86; in {
+# Do not remove pkgs-unstable — it is intentionally plumbed through for packages missing from stable nixpkgs
+{ pkgs, pkgs-unstable, llm-agents-pkgs }: with pkgs; let isX86 = pkgs.stdenv.hostPlatform.isx86; in {
   # Prefer using home.* for new packages (declaratively managed via home-manager)
   # NOTE: Emacs runtime deps (rust-analyzer, prettier, sphinx, etc.) are in config/emacs.nix
   home = {
     common = [
       llm-agents-pkgs.opencode
       llm-agents-pkgs.claude-code llm-agents-pkgs.claude-code-acp
+      dolt
+      llm-agents-pkgs.beads
       ripgrep tree yt-dlp
       # Fonts
       inter noto-fonts noto-fonts-cjk-sans noto-fonts-color-emoji

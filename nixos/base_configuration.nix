@@ -1,7 +1,7 @@
-{ config, pkgs, username, llm-agents-pkgs, ... }:
+{ config, pkgs, pkgs-unstable, username, llm-agents-pkgs, ... }:
 
 let
-  packages = import ../installed_packages.nix { inherit pkgs llm-agents-pkgs; };
+  packages = import ../installed_packages.nix { inherit pkgs pkgs-unstable llm-agents-pkgs; };
 in
 {
   # Timezone

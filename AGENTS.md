@@ -1,5 +1,10 @@
 # Home Manager Configuration
 
+## IMPORTANT: General rules
+- Do NOT format existing code (unless formatting is the primary task)
+- Prefer underscores to hyphens for filenames
+
+
 ## Overview
 
 This is a flake-based NixOS and home-manager configuration. The flake manages both system-level NixOS configurations and user-level home-manager configurations declaratively.
@@ -38,15 +43,6 @@ home-manager switch --flake .#<profile>
 
 To determine `<profile>`, check the hostname (`hostnamectl` or `cat /etc/hostname`). Use `laptop` if the hostname contains "laptop" or "thinkpad", otherwise use `desktop`.
 
-## Other Commands
-
-```bash
-# Update flake inputs
-nix flake update
-
-# Update a specific input
-nix flake update <input-name>
-```
 
 ## NixOS System Config
 
@@ -58,14 +54,10 @@ sudo nixos-rebuild switch --flake .#<profile>
 
 The `<profile>` should match the NixOS configuration defined in `flake.nix` (e.g., `dev_thinkpad`).
 
-## General rules
-- Do not format existing code unless formatting is the primary task.
-- Prefer underscores to hyphens for filenames
-
 ## Patterns
 
 - To ensure a directory exists under `$HOME`, use `home.file."path/to/dir/.keep".text = "";`
-- When a nix package is missing from stable nixpkgs, check `nixpkgs-unstable` before resorting to building from source. The flake already has it as an input (e.g. `pkgs-unstable.emacsPackages.*`).
+- When a nix package is missing from stable nixpkgs, check `nixpkgs-unstable` before resorting to building from source. The flake already has it as an input
 - To check nixpkgs-unstable for a package: `nix eval --json 'github:nixos/nixpkgs/nixpkgs-unstable#<pkg>.pname'`. Do NOT use `nixpkgs-unstable#...` (flake registry) — it doesn't exist in the registry.
 
 ## Key Differences
