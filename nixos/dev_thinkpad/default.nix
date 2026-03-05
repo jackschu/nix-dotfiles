@@ -19,13 +19,5 @@
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
-  # Tailscale auto-connect with thinkpad-specific hostname
-  systemd.user.services.kfsvpn = {
-    script = ''
-      ${pkgs.tailscale}/bin/tailscale up --hostname bonked --accept-routes --shields-up
-    '';
-    wantedBy = [ "default.target" ];
-  };
-
   system.stateVersion = "23.05";
 }

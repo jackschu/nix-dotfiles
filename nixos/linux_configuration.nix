@@ -15,6 +15,15 @@ in
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
 #  networking.enableIPv6 = false;
 
+  # Tailscale VPN
+  services.tailscale = {
+    enable = true;
+    extraUpFlags = [
+      "--accept-routes"
+      "--shields-up"
+    ];
+  };
+
   # Locale
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {

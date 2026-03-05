@@ -20,9 +20,6 @@ in
   # Automatic store optimization
   nix.optimise.automatic = true;
 
-  # Tailscale VPN
-  services.tailscale.enable = true;
-
   # System packages (cross-platform)
   environment.systemPackages = packages.system.common;
 

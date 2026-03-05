@@ -44,6 +44,17 @@ in
     export PATH="$HOME/.cargo/bin/:$PATH"
   '';
 
+  # Tailscale VPN
+  services.tailscale.enable = true;
+  launchd.daemons.tailscale_set_flags = {
+    script = ''
+      ${pkgs.tailscale}/bin/tailscale set --accept-routes=true --shields-up=true
+    '';
+    serviceConfig = {
+      RunAtLoad = true;
+    };
+  };
+
   # App switching hotkeys
   # After applying changes, run `skhd --reload` to pick up new bindings
   services.skhd = {
