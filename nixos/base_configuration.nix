@@ -10,6 +10,7 @@ in
   # Nix settings
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.trusted-users = [ username ];
+  nix.settings.download-buffer-size = 268435456; # 256 MiB
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

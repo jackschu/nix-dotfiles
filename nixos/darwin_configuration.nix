@@ -6,7 +6,6 @@ in
 {
   imports = [
     ./base_configuration.nix
-    ./overlays/inet-utils.nix
   ];
 
   system.stateVersion = 6;

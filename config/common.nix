@@ -70,44 +70,45 @@ in
       "#1d2230" # 5: darkest bg
     ];
     c = i: builtins.elemAt colors i;
-    style = fg: bg: "fg:${c fg} bg:${c bg}";
-    # sep: null for no separator, true to fade to terminal, or a color
-    #      index for the next block's background
-    block = fg: bg: content: sep:
-      "[${content}](${style fg bg})"
-      + (if sep == null then ""
-         else if sep == true then "[${g.separator}](fg:${c bg})"
-         else "[${g.separator}](${style bg sep})");
+    # Leading separator uses prev_bg to dynamically transition from
+    # whatever module was last rendered, then content with fg/bg.
+    segment = fg: bg: content:
+      "[${g.separator}](fg:prev_bg bg:${c bg})"
+      + "[${content}](fg:${c fg} bg:${c bg})";
   in {
     enable = true;
     enableBashIntegration = true;
+    package = pkgs.starship.overrideAttrs (old: {
+      patches = (old.patches or []) ++ [ ../patches/starship_nix_shell_trim_env.patch ];
+    });
     settings = {
       format = ''
-        [${g.gradient}](${c 1})[  ](${style 0 1})[${g.separator}](${style 1 2})$directory$git_branch$git_status$env_var
+        [${g.gradient}](${c 1})[  ](fg:${c 0} bg:${c 1})$directory$git_branch$git_status$nix_shell$env_var[${g.separator}](fg:prev_bg)
         $character'';
 
       git_branch = {
         disabled = false;
-        style = style 2 3;
-        format = block 2 3 " $symbol$branch " null;
+        format = segment 2 3 " $symbol$branch ";
       };
 
       git_status = {
-        style = style 2 3;
-        format = block 2 3 "($all_status$ahead_behind)" true;
+        format = "[($all_status$ahead_behind)](fg:${c 2} bg:${c 3})";
+      };
+
+      nix_shell = {
+        format = segment 2 5 " $symbol$name";
+        symbol = "❄ ";
+        disabled = false;
       };
 
       env_var.context = {
         variable = "SHELL_CONTEXT";
-        style = style 2 5;
-	# TODO this isnt quite right, 
-        format = block 2 5 " $env_value " 3;
+        format = segment 2 5 " $env_value ";
         disabled = false;
       };
 
       directory = {
-        style = style 4 2;
-        format = block 4 2 " $path " 3;
+        format = segment 4 2 " $path ";
         truncation_length = 3;
         truncation_symbol = "${g.ellipsis}/";
         home_symbol = "${g.home}";

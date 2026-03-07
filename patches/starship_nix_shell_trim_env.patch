@@ -1,0 +1,15 @@
+diff --git a/src/modules/nix_shell.rs b/src/modules/nix_shell.rs
+index abcdef1..1234567 100644
+--- a/src/modules/nix_shell.rs
++++ b/src/modules/nix_shell.rs
+@@ -57,7 +57,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+     let mut module = context.new_module("nix_shell");
+     let config: NixShellConfig = NixShellConfig::try_load(module.config);
+
+-    let shell_name = context.get_env("name");
++    let shell_name = context.get_env("name").map(|name| {
++        name.strip_suffix("-env").unwrap_or(&name).to_string()
++    });
+     let shell_type = NixShellType::detect_shell_type(config.heuristic, context)?;
+     let shell_type_format = match shell_type {
+         NixShellType::Pure => config.pure_msg,
