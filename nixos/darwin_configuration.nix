@@ -60,6 +60,7 @@ in
   services.skhd = {
     enable = true;
     skhdConfig = ''
+      ctrl + shift - 1 : open -a "Xcode"
       ctrl - 1 : open -a "Ghostty"
       ctrl - 2 : open -a "Google Chrome"
       ctrl - 3 : open -a "Discord"
