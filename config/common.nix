@@ -131,6 +131,16 @@ in
     };
   };
 
+  programs.ssh = {
+    enable = true;
+    enableDefaultConfig = false;
+    matchBlocks."*" = {
+      identityFile = [ "~/.ssh/id_ed25519" ];
+      identitiesOnly = true;
+      addKeysToAgent = "yes";
+    };
+  };
+
   programs.ghostty = {
     enable = true;
     settings = {
