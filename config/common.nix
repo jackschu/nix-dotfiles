@@ -34,13 +34,13 @@ in
     "$schema" = "https://opencode.ai/config.json";
     formatter = false;
     permission = {
-      read = "ask";
+      read = "allow";
       edit = "ask";
-      grep = "ask";
+      grep = "allow";
       bash = "ask";
       webfetch = "ask";
       websearch = "ask";
-      codesearch = "ask";
+      codesearch = "allow";
       external_directory = "ask";
     };
   };

@@ -17,8 +17,8 @@
 
 (setq web-mode-engines-alist
       '(("django" . "\\.html\\'")))
-(add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.ts[x]?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 (defun pk-web-mode-hook ()
   "Hooks for Web mode."
   (set-face-attribute 'web-mode-html-tag-bracket-face nil :foreground "White")
@@ -415,9 +415,12 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
 
 ;; tide things,
 (require 'tide)
+
 (defun setup-tide-mode ()
   (interactive)
   (tide-setup)
+  ;; needed because tide will follow minibuffer project which is CWD :/
+  (setq-local xref-prompt-for-identifier nil)
   (flycheck-mode +1)
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (eldoc-mode +1)
@@ -487,18 +490,6 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
   '(define-key tide-mode-map (kbd "C-x x s") 'tide-restart-server))
 
 
-(add-hook 'web-mode-hook
-          (lambda ()
-            (when (string-equal "tsx" (file-name-extension buffer-file-name))
-              (tsx-ts-mode))))
-(add-hook 'web-mode-hook
-          (lambda ()
-            (when (string-equal "ts" (file-name-extension buffer-file-name))
-              (typescript-ts-mode))))
-(add-hook 'web-mode-hook
-          (lambda ()
-            (when (string-equal "js" (file-name-extension buffer-file-name))
-              (typescript-ts-mode))))
 (add-hook 'js2-mode-hook #'setup-tide-mode)
 ;; configure javascript-tide checker to run after your default javascript checker
 (require 'flycheck)
