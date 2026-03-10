@@ -82,6 +82,19 @@ git add config/emacs-custom.el && git commit
 
 Keep settings in `emacs-init.el` when possible — the custom file is machine-generated and comments are stripped on every save, so youll need to use configures 'add comment' ability (select [State] and then its an option).
 
+## Tix Stubs (Manual Refresh)
+
+`tix` now uses the default binary during normal `home-manager switch` runs for faster evaluation. Generated stubs are refreshed manually and injected through `TIX_BUILTIN_STUBS`.
+
+`TIX_BUILTIN_STUBS` points to `${XDG_DATA_HOME:-$HOME/.local/share}/tix/stubs`. Home Manager will warn during activation if that path does not exist.
+
+Refresh stubs after changing `flake.lock` (especially `nixpkgs` or `home-manager`):
+
+```bash
+nix run .#refresh_tix_stubs
+home-manager switch --flake .#<profile>
+```
+
 ## Secrets
 
 Secrets are encrypted with [sops](https://github.com/getsops/sops) using [age](https://github.com/FiloSottile/age) keys. The `secrets/` directory contains encrypted files that are safe to commit publicly - only devices with a corresponding age private key can decrypt them.
@@ -113,4 +126,3 @@ Add a new entry to `homeConfigurations` in `flake.nix` and create a correspondin
 ```bash
 sops-edit secrets/secrets.yaml
 ```
-

@@ -1,5 +1,7 @@
 { pkgs, pkgs-unstable, llm-agents-pkgs, tix, lib, config, ... }:
 let
+  tix_stubs_path = "${config.xdg.dataHome}/tix/stubs";
+
   # Runtime binaries expected to be on $PATH by our emacs config
   runtimeDeps = with pkgs; [
     rust-analyzer
@@ -7,7 +9,7 @@ let
     python3Packages.sphinx
     ripgrep
     llm-agents-pkgs.claude-code-acp
-    tix.packages.${pkgs.system}.with-stubs
+    tix.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   # Tree-sitter grammars not in nixpkgs
@@ -35,6 +37,10 @@ let
   };
 in
 {
+  home.sessionVariables = {
+    TIX_BUILTIN_STUBS = tix_stubs_path;
+  };
+
   home.packages = runtimeDeps ++ [
     (pkgs.writeShellScriptBin "sync-emacs-custom" ''
       DEST="${config.home.homeDirectory}/.config/home-manager/config/emacs-custom.el"
@@ -52,6 +58,12 @@ in
   home.activation.initEmacsCustom = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     $DRY_RUN_CMD cp ${./emacs-custom.el} "$HOME/.emacs-custom.el"
     $DRY_RUN_CMD chmod 644 "$HOME/.emacs-custom.el"
+  '';
+
+  home.activation.warnMissingTixStubs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    if [ ! -e "${tix_stubs_path}" ]; then
+      echo "warning: TIX_BUILTIN_STUBS path missing (${tix_stubs_path}); run 'nix run .#refresh_tix_stubs'" >&2
+    fi
   '';
 
   programs.emacs = {
@@ -154,6 +166,7 @@ in
   home.file.".cache/emacs/.keep".text = "";
 
   home.file.".emacs".text = builtins.readFile ./emacs-init.el + ''
+
     (add-to-list 'treesit-extra-load-path "${tree-sitter-swift-grammar}/lib")
   '';
 }

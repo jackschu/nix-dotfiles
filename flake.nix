@@ -186,8 +186,32 @@
             modules = commonDarwinModules;
           };
         };
+
+      mkRefreshTixStubsApp = pkgs: {
+        type = "app";
+        program = toString (pkgs.writeShellScript "refresh_tix_stubs" ''
+          set -euo pipefail
+
+          repo_root="$(${pkgs.git}/bin/git rev-parse --show-toplevel 2>/dev/null || ${pkgs.coreutils}/bin/pwd)"
+          tix_stubs_link="''${XDG_DATA_HOME:-$HOME/.local/share}/tix/stubs"
+          mkdir -p "$(dirname "$tix_stubs_link")"
+          ${pkgs.nix}/bin/nix build "$repo_root#tix_stubs" --out-link "$tix_stubs_link" >/dev/null
+
+          printf 'Updated %s\n' "$tix_stubs_link"
+        '');
+      };
     in
     {
+      packages = {
+        ${darwinSystem}.tix_stubs = tix.packages.${darwinSystem}.stubs;
+        ${linuxSystem}.tix_stubs = tix.packages.${linuxSystem}.stubs;
+      };
+
+      apps = {
+        ${darwinSystem}.refresh_tix_stubs = mkRefreshTixStubsApp darwinPkgs;
+        ${linuxSystem}.refresh_tix_stubs = mkRefreshTixStubsApp linuxPkgs;
+      };
+
       homeConfigurations."laptop" = home-manager.lib.homeManagerConfiguration {
         pkgs = linuxPkgs;
         extraSpecialArgs = {

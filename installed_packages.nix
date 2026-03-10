@@ -6,7 +6,7 @@
     common = [
       llm-agents-pkgs.opencode
       llm-agents-pkgs.claude-code llm-agents-pkgs.claude-code-acp
-      task_task.packages.${pkgs.system}.default
+      task_task.packages.${pkgs.stdenv.hostPlatform.system}.default
       ripgrep tree yt-dlp
       # Fonts
       inter noto-fonts noto-fonts-cjk-sans noto-fonts-color-emoji
