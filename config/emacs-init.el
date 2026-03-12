@@ -333,6 +333,7 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
 
 ;; lsp stuff
 (require 'lsp)
+(require 'lsp-sourcekit)
 (add-hook 'rust-mode-hook #'lsp-deferred)
 (add-hook 'rust-ts-mode-hook #'lsp-deferred)
 
@@ -354,6 +355,7 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
     :server-id 'tix-lsp
     :priority 1))
   (add-to-list 'lsp-language-id-configuration '(nix-ts-mode . "nix"))
+  (add-to-list 'lsp-language-id-configuration '(swift-ts-mode . "swift"))
   ;; disable nil (auto-registered by lsp-nix)
   (setq lsp-nix-nil-server-path "false"))
 
@@ -525,6 +527,8 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
 
 ;; swift
 (add-to-list 'auto-mode-alist '("\\.swift\\'" . swift-ts-mode))
+(add-hook 'swift-ts-mode-hook #'lsp-deferred)
+(add-hook 'swift-ts-mode-hook (lambda () (setq-local xref-prompt-for-identifier nil)))
 
 ;; go stuffn
 (add-hook 'go-mode-hook 'lsp-mode)

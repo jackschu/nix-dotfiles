@@ -10,6 +10,10 @@ let
     ripgrep
     llm-agents-pkgs.claude-code-acp
     tix.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ] ++ lib.optionals pkgs.stdenv.isLinux [
+    # Linux needs explicit Swift toolchain/LSP; macOS gets sourcekit-lsp from Xcode.
+    swift
+    sourcekit-lsp
   ];
 
   # Tree-sitter grammars not in nixpkgs
@@ -107,6 +111,7 @@ in
 
         # LSP
         lsp-mode
+        lsp-sourcekit
         flycheck
         flycheck-rust
 

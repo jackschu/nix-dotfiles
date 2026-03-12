@@ -49,6 +49,6 @@
     ];
   };
 
-  brew.formulas = [ "lima" ];
-  brew.casks = [ "google-chrome" "ghostty" "discord" "spotify" ];
+  brew.formulas = [ "lima" "xcode-build-server" ];
+  brew.casks = [ "google-chrome" "ghostty" "discord" "spotify" "zoom" ];
 }

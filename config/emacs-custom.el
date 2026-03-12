@@ -31,7 +31,7 @@
    "ag --no-color --nogroup -W 150 --ignore=output/ --ignore=*.orig --ignore=*.*#")
  '(helm-always-two-windows nil)
  '(indent-tabs-mode nil)
- '(lsp-disabled-clients '(nix-nil))
+ '(lsp-disabled-clients '(nix-nil semgrep-ls))
  '(lsp-file-watch-ignored-directories
    '("[/\\\\]\\.cargo\\'" "[/\\\\]\\output\\'" "[/\\\\]\\cargo-target\\'"
      "[/\\\\]\\.git\\'" "[/\\\\]\\.github\\'" "[/\\\\]\\.gitlab\\'"
