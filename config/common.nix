@@ -43,6 +43,24 @@ in
       codesearch = "allow";
       external_directory = "ask";
     };
+    provider.ollama = {
+      npm = "@ai-sdk/openai-compatible";
+      name = "Ollama (gpu server)";
+      options = {
+        baseURL = "http://ollama.taild3c1e.ts.net:11434/v1";
+        apiKey = "ollama";
+        timeout = 600000;
+        chunkTimeout = 60000;
+      };
+      models."qwen3-coder:30b" = {
+        name = "Qwen3 Coder 30B";
+        tool_call = true;
+        limit = {
+          context = 100000;
+          output = 8192;
+        };
+      };
+    };
   };
 
   # Let Home Manager install and manage itself.
