@@ -545,6 +545,21 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
           (lambda ()
             (add-hook 'xref-backend-functions #'dumb-jump-xref-activate 100 t)))
 
+(defun my-xref-preview-pulse (&rest _)
+  "Highlight destination line when previewing xref results."
+  (let* ((item (xref--item-at-point))
+         (location (and item (xref-item-location item)))
+         (marker (and location (xref-location-marker location)))
+         (buffer (and marker (marker-buffer marker)))
+         (window (and buffer (get-buffer-window buffer 0))))
+    (when window
+      (with-selected-window window
+        (save-excursion
+          (goto-char marker)
+          (pulsar-pulse-line))))))
+
+(advice-add 'xref-show-location-at-point :after #'my-xref-preview-pulse)
+
 ;; zzz-mode
 (global-set-key (kbd "M-z") #'zzz-to-char)
 
