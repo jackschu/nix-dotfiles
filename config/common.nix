@@ -185,6 +185,7 @@ in
         "alt+nine=goto_tab:9"
         # Disabled shortcuts
         "ctrl+tab=unbind"
+        "ctrl+shift+tab=unbind"
         "ctrl+enter=unbind"
       ];
     };
