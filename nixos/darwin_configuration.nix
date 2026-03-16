@@ -71,6 +71,7 @@ in
   # Homebrew integration (for apps not in nixpkgs)
   homebrew = {
     enable = true;
+    onActivation.upgrade = true;
     onActivation.cleanup = "zap";
     brews = packages.brew.formulas;
     casks = packages.brew.casks;
