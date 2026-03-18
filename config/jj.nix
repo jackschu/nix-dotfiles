@@ -13,6 +13,7 @@
         editor = "emacs -nw --no-desktop";
         pager = "delta";
         "diff-formatter" = ":git";
+        default-command = "log";
       };
 
       signing = {
@@ -23,6 +24,10 @@
 
       git = {
         sign-on-push = true;
+      };
+
+      aliases = {
+        b = [ "bookmark" ];
       };
     };
   };

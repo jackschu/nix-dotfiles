@@ -127,6 +127,7 @@ in
         yaml-mode
         protobuf-mode
         protobuf-ts-mode
+        swift-mode
         swift-ts-mode
         php-mode
         sml-mode

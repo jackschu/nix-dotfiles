@@ -32,6 +32,10 @@ in
   # Disable autocorrect
   system.defaults.NSGlobalDomain.NSAutomaticSpellingCorrectionEnabled = false;
 
+  # Key repeat speed (match Linux: 500ms delay, ~30 chars/sec)
+  system.defaults.NSGlobalDomain.InitialKeyRepeat = 33;
+  system.defaults.NSGlobalDomain.KeyRepeat = 2;
+
   # Show keyboard brightness in Control Center
   system.defaults.CustomUserPreferences."com.apple.controlcenter" = {
     "NSStatusItem Visible KeyboardBrightness" = true;
