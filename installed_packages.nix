@@ -56,6 +56,7 @@
       name = "ghostty";
       greedy = true;
     }
+    "unnaturalscrollwheels"
     "discord"
     "spotify"
     "zoom"
