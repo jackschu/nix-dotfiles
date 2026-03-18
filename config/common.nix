@@ -16,6 +16,7 @@ in
     ./sops.nix
     ./gpg.nix
     ./git.nix
+    ./jj.nix
     ./emacs.nix
   ];
 

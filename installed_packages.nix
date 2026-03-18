@@ -12,6 +12,7 @@
       inter noto-fonts noto-fonts-cjk-sans noto-fonts-color-emoji
       nerd-fonts.jetbrains-mono
       sioyek
+      jujutsu
     ];
     linux = [ wl-clipboard kdePackages.kdbusaddons ] ++ lib.optionals isX86 [
       zoom-us discord spotify
@@ -57,6 +58,7 @@
       greedy = true;
     }
     "unnaturalscrollwheels"
+    "signal"
     "discord"
     "spotify"
     "zoom"
