@@ -47,6 +47,7 @@
       xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr
     ] ++ lib.optionals isX86 [
       steam-run
+      obs-studio
     ];
   };
 
@@ -62,5 +63,6 @@
     "discord"
     "spotify"
     "zoom"
+    "obs"
   ];
 }
