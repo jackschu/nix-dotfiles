@@ -389,6 +389,11 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
 (require 'helm-ag)
 (setq helm-ag-insert-at-point 'symbol)
 (global-set-key (kbd "M-/") 'helm-ag-project-root)
+;; helm-ag hardcodes .git/.hg/.svn for project root detection; add .jj for jujutsu repos
+(defun helm-ag--project-root ()
+  (cl-loop for dir in '(".git/" ".hg/" ".svn/" ".git" ".jj/")
+           when (locate-dominating-file default-directory dir)
+           return it))
 
 
 
