@@ -249,6 +249,8 @@
           pkgs-unstable = darwinPkgsUnstable;
           llm-agents-pkgs = llm-agents.packages.${darwinSystem};
           username = "williamtonks";
+          gitName = "williamrntonks";
+          gitEmail = "245291231+williamrntonks@users.noreply.github.com";
           inherit tix task_task;
         };
         modules = commonModules ++ [ ./config/darwin.nix ];

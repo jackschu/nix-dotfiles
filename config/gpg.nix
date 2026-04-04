@@ -28,6 +28,14 @@ in
     programs.git.signing.key = "2A0AF30A3BD43ABB";
     programs.git.settings.commit.gpgsign = true;
 
+    # Jujutsu commit signing
+    programs.jujutsu.settings.signing = {
+      backend = "gpg";
+      behavior = "own";
+      key = "2A0AF30A3BD43ABB";
+    };
+    programs.jujutsu.settings.git.sign-on-push = true;
+
     # Import GPG key from sops secret after decryption
     home.activation.importGpgKey = lib.hm.dag.entryAfter [ "sops-nix" ] ''
       GPG_KEY_FILE="${config.sops.secrets."github-gpg-key".path}"
