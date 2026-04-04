@@ -26,11 +26,11 @@ sudo nixos-rebuild switch --flake ~/.config/home-manager#<profile>
 
 ### macOS Setup
 
-Update the darwin constants in `flake.nix` under `darwinConfigurations` for your machine:
+Set your darwin profile values in `flake.nix` under `darwinConfigurations` for your machine:
 
 ```nix
-username = "jackschumann";  # your macOS username
-uid = 501;                  # your user ID (run `id -u` to find it)
+username = "your-macos-username";
+uid = 501;  # your user ID (run `id -u` to find it)
 ```
 
 You may want to create a new configuration and profile name in `flake.nix` for your machine.
@@ -43,19 +43,19 @@ xcode-select --install
 curl -sSf -L https://install.lix.systems/lix | sh -s -- install
 
 # Apply home-manager configuration
-sudo home-manager switch --flake .#macbook_air
+sudo home-manager switch --flake .#jack_macbook
 
 # Bootstrap (required if using private flake inputs)
-sudo nix run nix-darwin -- switch --flake .#macbook_air-bootstrap --override-input agent-runtime path:./bootstrap-stub
+sudo nix run nix-darwin -- switch --flake .#jack_macbook-bootstrap --override-input agent-runtime path:./bootstrap-stub
 
 # Initial nix-darwin setup (system-level, requires sudo)
-sudo nix run nix-darwin -- switch --flake .#macbook_air
+sudo nix run nix-darwin -- switch --flake .#jack_macbook
 
 # After initial nix-darwin setup, use:
-darwin-rebuild switch --flake .#macbook_air
+darwin-rebuild switch --flake .#jack_macbook
 ```
 
-Use `laptop` or `desktop` for home-manager profiles. For NixOS profiles use `dev_thinkpad` or `desktop`. For nix-darwin profiles use `macbook_air`.
+Use `laptop` or `desktop` for Linux home-manager profiles. For NixOS profiles use `dev_thinkpad` or `desktop`. For macOS use `jack_macbook` or `tonks_macbook`.
 
 ## Emacs Customization
 

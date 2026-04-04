@@ -232,21 +232,39 @@
         modules = linuxBaseModules ++ [ ./config/desktop.nix ];
       };
 
-      homeConfigurations."macbook_air" = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."jack_macbook" = home-manager.lib.homeManagerConfiguration {
         pkgs = darwinPkgs;
         extraSpecialArgs = {
           pkgs-unstable = darwinPkgsUnstable;
           llm-agents-pkgs = llm-agents.packages.${darwinSystem};
+          username = "jackschumann";
           inherit tix task_task;
         };
         modules = commonModules ++ [ ./config/darwin.nix ];
       };
 
-      darwinConfigurations = mkDarwin {
-        name = "macbook_air";
-        username = "jackschumann";
-        uid = 501;
+      homeConfigurations."tonks_macbook" = home-manager.lib.homeManagerConfiguration {
+        pkgs = darwinPkgs;
+        extraSpecialArgs = {
+          pkgs-unstable = darwinPkgsUnstable;
+          llm-agents-pkgs = llm-agents.packages.${darwinSystem};
+          username = "williamtonks";
+          inherit tix task_task;
+        };
+        modules = commonModules ++ [ ./config/darwin.nix ];
       };
+
+      darwinConfigurations =
+        (mkDarwin {
+          name = "jack_macbook";
+          username = "jackschumann";
+          uid = 501;
+        })
+        // (mkDarwin {
+          name = "tonks_macbook";
+          username = "williamtonks";
+          uid = 501;
+        });
 
       nixosConfigurations =
         (mkNixos {

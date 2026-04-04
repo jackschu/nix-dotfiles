@@ -9,16 +9,10 @@
   programs.git = {
     enable = true;
 
-    signing.key = "2A0AF30A3BD43ABB";
-
     settings = {
       user = {
         name = "jackschu";
         email = "31808950+jackschu@users.noreply.github.com";
-      };
-
-      commit = {
-        gpgsign = true;
       };
 
       init = {

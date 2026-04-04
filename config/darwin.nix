@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  username,
   ...
 }:
 
@@ -21,6 +22,6 @@
 
   programs.ghostty.package = null; # installed via brew
 
-  home.username = "jackschumann";
-  home.homeDirectory = "/Users/jackschumann";
+  home.username = username;
+  home.homeDirectory = "/Users/${username}";
 }

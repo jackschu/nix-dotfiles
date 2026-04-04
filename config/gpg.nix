@@ -19,8 +19,14 @@ in
       pinentry.package = pkgs.pinentry-curses;
     };
 
-    # Decrypt GPG key from sops
-    sops.secrets."github-gpg-key" = { };
+    # Decrypt GPG key from sops (private secrets, not shared with collaborators)
+    sops.secrets."github-gpg-key" = {
+      sopsFile = ../secrets/private.yaml;
+    };
+
+    # Git commit signing (only when GPG is enabled)
+    programs.git.signing.key = "2A0AF30A3BD43ABB";
+    programs.git.settings.commit.gpgsign = true;
 
     # Import GPG key from sops secret after decryption
     home.activation.importGpgKey = lib.hm.dag.entryAfter [ "sops-nix" ] ''

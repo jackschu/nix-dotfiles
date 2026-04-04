@@ -8,6 +8,6 @@ in
     age.keyFile = "${homeBase}/${username}/.config/sops/age/keys.txt";
     age.sshKeyPaths = [];
     gnupg.sshKeyPaths = [];
-    defaultSopsFile = ../secrets/secrets.yaml;
+    defaultSopsFile = ../secrets/shared.yaml;
   };
 }
