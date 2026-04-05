@@ -3,7 +3,7 @@
 with pkgs;
 let
   isX86 = pkgs.stdenv.hostPlatform.isx86;
-  opencode_mcp_auth = llm-agents-pkgs.opencode.overrideAttrs (old: {
+  opencode_mcp_auth = pkgs-unstable.opencode.overrideAttrs (old: {
     patches = (old.patches or []) ++ [ ./patches/opencode_mcp_auth_workaround.patch ];
   });
 in {
