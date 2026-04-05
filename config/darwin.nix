@@ -12,7 +12,7 @@
   ];
 
   custom.secrets.enable = true;
-  custom.gpg.enable = true;
+  custom.gpg.enable = lib.mkDefault true;
 
   programs.ssh.extraConfig = ''
     Host *

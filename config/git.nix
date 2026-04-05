@@ -1,5 +1,5 @@
 # Git configuration
-{ config, pkgs, lib, gitName ? "jackschu", gitEmail ? "31808950+jackschu@users.noreply.github.com", ... }:
+{ config, pkgs, lib, gitName, gitEmail, ... }:
 
 {
   home.packages = [

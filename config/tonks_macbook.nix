@@ -1,0 +1,5 @@
+{ ... }:
+
+{
+  custom.gpg.enable = false;
+}

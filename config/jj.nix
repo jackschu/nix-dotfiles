@@ -1,4 +1,4 @@
-{ gitName ? "jackschu", gitEmail ? "31808950+jackschu@users.noreply.github.com", ... }:
+{ gitName, gitEmail, ... }:
 
 {
   programs.jujutsu = {

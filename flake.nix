@@ -72,6 +72,8 @@
     let
       linuxSystem = "x86_64-linux";
       darwinSystem = "aarch64-darwin";
+      defaultGitName = "jackschu";
+      defaultGitEmail = "31808950+jackschu@users.noreply.github.com";
       linuxPkgs = import nixpkgs {
         system = linuxSystem;
         config.allowUnfree = true;
@@ -90,6 +92,12 @@
       };
       commonModules = [
         sops-nix.homeManagerModules.sops
+        {
+          _module.args = {
+            gitName = defaultGitName;
+            gitEmail = defaultGitEmail;
+          };
+        }
       ];
       linuxBaseModules = commonModules ++ [
         plasma-manager.homeModules.plasma-manager
@@ -253,7 +261,7 @@
           gitEmail = "245291231+williamrntonks@users.noreply.github.com";
           inherit tix task_task;
         };
-        modules = commonModules ++ [ ./config/darwin.nix ];
+        modules = commonModules ++ [ ./config/darwin.nix ./config/tonks_macbook.nix ];
       };
 
       darwinConfigurations =
