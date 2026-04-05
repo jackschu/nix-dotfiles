@@ -37,7 +37,7 @@
     };
     llm-agents = {
       url = "github:numtide/llm-agents.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
