@@ -1,10 +1,17 @@
 # Do not remove pkgs-unstable — it is intentionally plumbed through for packages missing from stable nixpkgs
-{ pkgs, pkgs-unstable, llm-agents-pkgs, task_task }: with pkgs; let isX86 = pkgs.stdenv.hostPlatform.isx86; in {
+{ pkgs, pkgs-unstable, llm-agents-pkgs, task_task }:
+with pkgs;
+let
+  isX86 = pkgs.stdenv.hostPlatform.isx86;
+  opencode_mcp_auth = llm-agents-pkgs.opencode.overrideAttrs (old: {
+    patches = (old.patches or []) ++ [ ./patches/opencode_mcp_auth_workaround.patch ];
+  });
+in {
   # Prefer using home.* for new packages (declaratively managed via home-manager)
   # NOTE: Emacs runtime deps (rust-analyzer, prettier, sphinx, etc.) are in config/emacs.nix
   home = {
     common = [
-      llm-agents-pkgs.opencode
+      opencode_mcp_auth
       llm-agents-pkgs.claude-code llm-agents-pkgs.claude-code-acp
       task_task.packages.${pkgs.stdenv.hostPlatform.system}.default
       ripgrep tree yt-dlp
