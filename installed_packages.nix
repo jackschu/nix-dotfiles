@@ -64,5 +64,6 @@
     "spotify"
     "zoom"
     "obs"
+    "figma"
   ];
 }
