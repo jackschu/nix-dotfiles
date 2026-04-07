@@ -64,6 +64,7 @@ in
     enable = true;
     skhdConfig = ''
       ctrl + shift - 1 : open -a "Xcode"
+      ctrl + shift - 2 : open -a "Sioyek"
       ctrl - 1 : open -a "Ghostty"
       ctrl - 2 : open -a "Google Chrome"
       ctrl - 3 : open -a "Discord"

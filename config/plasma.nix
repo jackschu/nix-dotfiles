@@ -76,6 +76,12 @@
         ];
       }
     ];
+    hotkeys.commands.sioyek = {
+      # Untested: verify key combo and app name on Plasma host.
+      name = "Sioyek";
+      key = "Ctrl+Shift+2";
+      command = "sioyek";
+    };
     configFile = {
       ksmserverrc = {
         General = {
