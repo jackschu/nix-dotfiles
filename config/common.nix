@@ -185,8 +185,8 @@ in
         "alt+eight=goto_tab:8"
         "alt+nine=goto_tab:9"
         # Disabled shortcuts
-        "ctrl+tab=unbind"
-        "ctrl+shift+tab=unbind"
+        "ctrl+tab=ignore"
+        "ctrl+shift+tab=ignore"
         "ctrl+enter=unbind"
       ];
     };

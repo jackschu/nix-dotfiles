@@ -95,6 +95,7 @@ in
   environment.interactiveShellInit = ''
     export PATH="$HOME/.cargo/bin/:$PATH"
   '';
+  programs.steam.enable = isX86;
   programs.bash.shellAliases = {
     hg = "git";
   };

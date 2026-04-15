@@ -70,6 +70,7 @@ in {
     "discord"
     "spotify"
     "zoom"
+    "steam"
     "obs"
   ];
 }
