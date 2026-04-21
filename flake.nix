@@ -27,6 +27,10 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
+    homebrew-getsentry-xcodebuildmcp = {
+      url = "github:getsentry/homebrew-xcodebuildmcp";
+      flake = false;
+    };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -61,6 +65,7 @@
       nix-homebrew,
       homebrew-core,
       homebrew-cask,
+      homebrew-getsentry-xcodebuildmcp,
       plasma-manager,
       agent-runtime,
       llm-agents,
@@ -158,9 +163,11 @@
               nix-homebrew = {
                 enable = true;
                 user = username;
+                # When declaring taps, please ensure to name the key as a unique folder starting with `homebrew-`... (requirement from nix-homebrew README)
                 taps = {
                   "homebrew/homebrew-core" = homebrew-core;
                   "homebrew/homebrew-cask" = homebrew-cask;
+                  "getsentry/homebrew-xcodebuildmcp" = homebrew-getsentry-xcodebuildmcp;
                 };
                 mutableTaps = false;
               };

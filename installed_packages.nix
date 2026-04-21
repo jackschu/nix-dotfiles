@@ -58,7 +58,8 @@ in {
     ];
   };
 
-  brew.formulas = [ "lima" "xcode-build-server" ];
+  # Homebrew formulas are usually CLI tools; casks are usually GUI/macOS app bundles.
+  brew.formulas = [ "lima" "xcode-build-server" "xcodebuildmcp" ];
   brew.casks = [
     "google-chrome"
     {

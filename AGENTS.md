@@ -3,6 +3,8 @@
 ## IMPORTANT: General rules
 - Do NOT format existing code (unless formatting is the primary task)
 - Prefer underscores to hyphens for filenames
+- Use `jj` rather than `git`
+- Before running flake checks track new files with `jj file track`
 
 
 ## Overview
