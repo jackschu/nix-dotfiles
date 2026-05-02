@@ -8,7 +8,7 @@ let
     nodePackages.prettier
     python3Packages.sphinx
     ripgrep
-    llm-agents-pkgs.claude-code-acp
+    llm-agents-pkgs.claude-agent-acp
     tix.packages.${pkgs.stdenv.hostPlatform.system}.default
   ] ++ lib.optionals pkgs.stdenv.isLinux [
     # Linux needs explicit Swift toolchain/LSP; macOS gets sourcekit-lsp from Xcode.

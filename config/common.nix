@@ -163,6 +163,7 @@ in
   programs.ghostty = {
     enable = true;
     settings = {
+      macos-option-as-alt = "left";
       background-image = builtins.toString ./terminal_bg.png;
       background-image-opacity = 1;
       background-image-fit = "cover";

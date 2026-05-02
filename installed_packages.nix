@@ -12,7 +12,7 @@ in {
   home = {
     common = [
       opencode_mcp_auth
-      llm-agents-pkgs.claude-code llm-agents-pkgs.claude-code-acp
+      llm-agents-pkgs.claude-code llm-agents-pkgs.claude-agent-acp
       task_task.packages.${pkgs.stdenv.hostPlatform.system}.default
       ripgrep tree yt-dlp
       # Fonts
@@ -46,7 +46,7 @@ in {
     ];
     linux = [
       # GUI apps
-      pavucontrol firefox
+      pavucontrol firefox vlc
       # Linux-specific tools
       xclip patchelf emscripten docker
       # Graphics / Wayland libs
@@ -62,14 +62,18 @@ in {
   brew.formulas = [ "lima" "xcode-build-server" "xcodebuildmcp" ];
   brew.casks = [
     "google-chrome"
+    "docker-desktop" 
+    "bazecor"
     {
       name = "ghostty";
       greedy = true;
     }
     "unnaturalscrollwheels"
     "signal"
+    "vlc"
     "discord"
     "spotify"
+    "sf-symbols"
     "zoom"
     "steam"
     "obs"

@@ -97,6 +97,9 @@
 (setq org-list-demote-modify-bullet '( ("-" . "+") ("*" . "+")("+" . "-")))
 (global-set-key (kbd "C-c a") #'org-agenda)
 (global-set-key (kbd "C-c c") #'org-capture)
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-c C-x C-i") #'org-clock-in)
+  (define-key org-mode-map (kbd "C-c C-x i") #'org-clock-in))
 ;; (setq org-capture-templates
 ;;   '(("t" "Task" entry (file "~/Documents/jacks_org/notes.org")
 ;;      (file "~/Documents/jacks_org/template.org") :empty-lines-before 1)
