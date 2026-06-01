@@ -12,7 +12,7 @@ in {
   home = {
     common = [
       opencode_mcp_auth
-      llm-agents-pkgs.claude-code llm-agents-pkgs.claude-agent-acp
+      llm-agents-pkgs.claude-code llm-agents-pkgs.claude-agent-acp llm-agents-pkgs.codex
       task_task.packages.${pkgs.stdenv.hostPlatform.system}.default
       ripgrep tree yt-dlp
       # Fonts
@@ -31,7 +31,7 @@ in {
       home-manager fd bottom gnuplot emacs-nox git
       ispell nixfmt silver-searcher nodejs node2nix
     ];
-    linux = [ perf gparted e2fsprogs dosfstools ntfsprogs ];
+    linux = [ perf gparted e2fsprogs dosfstools ntfsprogs dnsutils ];
     linuxPrinting = [
       cups-filters cups-browsed brlaser
       brgenml1lpr brgenml1cupswrapper

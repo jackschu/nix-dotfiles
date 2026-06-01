@@ -5,6 +5,13 @@ let
   isX86 = pkgs.stdenv.hostPlatform.isx86;
 in
 {
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc
+    zlib
+    openssl
+  ];
+
   imports = [ ./base_configuration.nix ];
   # Bootloader
   boot.loader.systemd-boot.enable = true;
