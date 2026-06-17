@@ -75,19 +75,27 @@ in
     package = pkgs.emacs-nox;
     extraPackages = epkgs:
       let
-        helm-ag = epkgs.trivialBuild {
-          pname = "helm-ag";
-          version = "0.64";
-          src = pkgs.fetchFromGitHub {
-            owner = "emacsorphanage";
-            repo = "helm-ag";
-            rev = "a7b43d9622ea5dcff3e3e0bb0b7dcc342b272171";
-            hash = "sha256-bIuZPMsY0iwkUFOfB6rGno0WvlPtbqqgujwhUb6nTLw=";
+        patchedEpkgs = epkgs.overrideScope (_final: prev: {
+          helm-ag = prev.trivialBuild {
+            pname = "helm-ag";
+            version = "0.64";
+            src = pkgs.fetchFromGitHub {
+              owner = "emacsorphanage";
+              repo = "helm-ag";
+              rev = "a7b43d9622ea5dcff3e3e0bb0b7dcc342b272171";
+              hash = "sha256-bIuZPMsY0iwkUFOfB6rGno0WvlPtbqqgujwhUb6nTLw=";
+            };
+            packageRequires = [ prev.helm ];
           };
-          packageRequires = [ epkgs.helm ];
-        };
+
+          projectile = prev.projectile.overrideAttrs (old: {
+            postPatch = (old.postPatch or "") + ''
+              rm -f projectile-consult.el
+            '';
+          });
+        });
       in
-      with epkgs; [
+      with patchedEpkgs; [
         # Core
         use-package
         company
