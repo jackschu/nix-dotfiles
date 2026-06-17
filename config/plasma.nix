@@ -127,6 +127,12 @@
           MaxClipItems = 1;  # Only keep current item (disables history)
         };
       };
+      spectaclerc = {
+        General = {
+          # If Plasma restores Spectacle from the previous session, reopen idle.
+          launchAction = "DoNotTakeScreenshot";
+        };
+      };
       kglobalshortcutsrc = {
       };
     };
