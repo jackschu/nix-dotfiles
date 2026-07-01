@@ -60,6 +60,9 @@
         shelve = "stash";
         revert = "checkout";
         branches = "branch -a --sort=-committerdate";
+        # Review a diff/commit in hunk (delta stays the default pager)
+        hdiff = "!hunk diff";
+        hshow = "!hunk show";
       };
 
       # GitHub credential helper using gh CLI

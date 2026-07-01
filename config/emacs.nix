@@ -5,7 +5,7 @@ let
   # Runtime binaries expected to be on $PATH by our emacs config
   runtimeDeps = with pkgs; [
     rust-analyzer
-    nodePackages.prettier
+    prettier
     python3Packages.sphinx
     ripgrep
     llm-agents-pkgs.claude-agent-acp

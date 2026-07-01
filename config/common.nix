@@ -17,6 +17,7 @@ in
     ./gpg.nix
     ./git.nix
     ./jj.nix
+    ./hunk.nix
     ./emacs.nix
   ];
 
@@ -154,10 +155,10 @@ in
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks."*" = {
-      identityFile = [ "~/.ssh/id_ed25519" ];
-      identitiesOnly = true;
-      addKeysToAgent = "yes";
+    settings."*" = {
+      IdentityFile = [ "~/.ssh/id_ed25519" ];
+      IdentitiesOnly = true;
+      AddKeysToAgent = "yes";
     };
   };
 
@@ -171,6 +172,7 @@ in
       background-opacity = 0.9;
       font-feature = ["-liga" "-dlig" "-calt"];
       desktop-notifications = false;
+      cursor-style = "block";
       cursor-color = "#ff55ff";
       keybind = [
         # Clipboard

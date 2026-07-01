@@ -1,7 +1,7 @@
 {
   description = "Bootstrap age key for home-manager sops setup";
 
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
 
   outputs =
     { nixpkgs, ... }:

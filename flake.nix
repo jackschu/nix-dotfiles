@@ -2,10 +2,10 @@
   description = "Home Manager configuration of devbox";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
@@ -13,7 +13,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-homebrew = {
@@ -37,7 +37,7 @@
       inputs.home-manager.follows = "home-manager";
     };
     agent-runtime = {
-      url = "github:jackschu/agent_runtime";
+      url = "github:jackschu/agent_runtime/multiagent";
     };
     llm-agents = {
       url = "github:numtide/llm-agents.nix";
@@ -52,6 +52,9 @@
     };
     task_task = {
       url = "github:jackschu/task-task";
+    };
+    hunk = {
+      url = "github:modem-dev/hunk";
     };
   };
 
@@ -72,6 +75,7 @@
       emacs-overlay,
       tix,
       task_task,
+      hunk,
       ...
     }:
     let
@@ -97,6 +101,7 @@
       };
       commonModules = [
         sops-nix.homeManagerModules.sops
+        hunk.homeManagerModules.default
         {
           _module.args = {
             gitName = defaultGitName;

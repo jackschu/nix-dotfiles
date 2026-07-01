@@ -29,7 +29,7 @@ in {
   system = {
     common = [
       home-manager fd bottom gnuplot emacs-nox git
-      ispell nixfmt silver-searcher nodejs node2nix
+      ispell nixfmt silver-searcher nodejs
     ];
     linux = [ perf gparted e2fsprogs dosfstools ntfsprogs dnsutils ];
     linuxPrinting = [
@@ -42,7 +42,7 @@ in {
     common = [
       unzip imagemagick nil bat ngrok git delta jq wget htop tokei gh
       clang clang-tools rustup awscli2 python3 tailscale go gopls
-      yarn nodePackages.prettier tree-sitter graphviz pkg-config
+      yarn prettier tree-sitter graphviz pkg-config
     ];
     linux = [
       # GUI apps
@@ -51,7 +51,7 @@ in {
       xclip patchelf emscripten docker
       # Graphics / Wayland libs
       libGL libxkbcommon wayland
-      xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr
+      libx11 libxcursor libxi libxrandr
     ] ++ lib.optionals isX86 [
       steam-run
       obs-studio

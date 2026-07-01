@@ -77,12 +77,12 @@
       libGL
       libxkbcommon
       wayland
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrandr
+      libx11
+      libxcursor
+      libxi
+      libxrandr
       go gopls
-      yarn nodePackages.prettier
+      yarn prettier
       tree-sitter
       emscripten
       graphviz
@@ -123,7 +123,6 @@
     ispell nixfmt silver-searcher
     nodejs
     gparted e2fsprogs dosfstools ntfsprogs
-    node2nix
   ];
 
   # Emacs config
