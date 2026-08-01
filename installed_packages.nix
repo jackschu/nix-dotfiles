@@ -40,7 +40,7 @@ in {
 
   user = {
     common = [
-      unzip imagemagick nil bat ngrok git delta jq wget htop tokei gh
+      unzip imagemagick nil bat ngrok git delta jq wget htop tokei gh mosh
       clang clang-tools rustup awscli2 python3 tailscale go gopls
       yarn prettier tree-sitter graphviz pkg-config
     ];

@@ -93,6 +93,14 @@ in
               rm -f projectile-consult.el
             '';
           });
+
+          # GNU ELPA regenerates release tarballs, so the hash nixpkgs pinned
+          # for org-9.8.7 drifts. Pin the current upstream hash ourselves.
+          org = prev.org.overrideAttrs (old: {
+            src = old.src.overrideAttrs (_: {
+              outputHash = "sha256-bYBtYtZkvZYG1qhPWBTBcWoH0xW+NW4m4m5ime5w+vg=";
+            });
+          });
         });
       in
       with patchedEpkgs; [

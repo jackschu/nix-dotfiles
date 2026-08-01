@@ -16,6 +16,7 @@
 
   programs.ssh.extraConfig = ''
     Host *
+      IgnoreUnknown UseKeychain
       UseKeychain yes
   '';
 
