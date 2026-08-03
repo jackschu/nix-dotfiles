@@ -56,6 +56,10 @@
     hunk = {
       url = "github:modem-dev/hunk";
     };
+    homelab = {
+      url = "github:jackschu/homelab?ref=agentic";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -76,6 +80,7 @@
       tix,
       task_task,
       hunk,
+      homelab,
       ...
     }:
     let
@@ -102,6 +107,8 @@
       commonModules = [
         sops-nix.homeManagerModules.sops
         hunk.homeManagerModules.default
+        homelab.homeManagerModules.motionSyncthing
+        homelab.homeManagerModules.agentTools
         {
           _module.args = {
             gitName = defaultGitName;
