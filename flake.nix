@@ -57,7 +57,7 @@
       url = "github:modem-dev/hunk";
     };
     homelab = {
-      url = "github:jackschu/homelab?ref=agentic";
+      url = "github:jackschu/homelab";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -107,6 +107,7 @@
       commonModules = [
         sops-nix.homeManagerModules.sops
         hunk.homeManagerModules.default
+        homelab.homeManagerModules.fleetCockpit
         homelab.homeManagerModules.motionSyncthing
         homelab.homeManagerModules.agentTools
         {
@@ -131,6 +132,7 @@
         }:
         let
           sharedModules = [
+#            homelab.buildCluster //TODO
             sops-nix.nixosModules.sops
             ./nixos/nix_private_repos.nix
             ./nixos/linux_configuration.nix
