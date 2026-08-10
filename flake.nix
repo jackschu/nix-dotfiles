@@ -132,30 +132,30 @@
         }:
         let
           sharedModules = [
-#            homelab.buildCluster //TODO
             sops-nix.nixosModules.sops
             ./nixos/nix_private_repos.nix
+            ./nixos/build_cluster.nix
             ./nixos/linux_configuration.nix
             ./nixos/${name}
           ];
+          # homelabFlake, not homelab: the module it carries owns the `homelab.*`
+          # option namespace, so sharing the name would read as the options tree.
+          nixosSpecialArgs = {
+            inherit username userDescription task_task;
+            homelabFlake = homelab;
+            pkgs-unstable = linuxPkgsUnstable;
+            llm-agents-pkgs = llm-agents.packages.${linuxSystem};
+          };
         in
         {
           "${name}" = nixpkgs.lib.nixosSystem {
             system = linuxSystem;
-            specialArgs = {
-              inherit username userDescription task_task;
-              pkgs-unstable = linuxPkgsUnstable;
-              llm-agents-pkgs = llm-agents.packages.${linuxSystem};
-            };
+            specialArgs = nixosSpecialArgs;
             modules = sharedModules ++ privateModules;
           };
           "${name}-bootstrap" = nixpkgs.lib.nixosSystem {
             system = linuxSystem;
-            specialArgs = {
-              inherit username userDescription task_task;
-              pkgs-unstable = linuxPkgsUnstable;
-              llm-agents-pkgs = llm-agents.packages.${linuxSystem};
-            };
+            specialArgs = nixosSpecialArgs;
             modules = sharedModules;
           };
         };
