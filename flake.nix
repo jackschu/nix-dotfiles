@@ -192,26 +192,27 @@
                 homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
               }
             )
+            ./nixos/darwin_build_cluster.nix
             ./nixos/darwin_configuration.nix
           ];
+          # homelabFlake, not homelab: the module it carries owns the `homelab.*`
+          # option namespace, so sharing the name would read as the options tree.
+          darwinSpecialArgs = {
+            inherit username uid task_task;
+            homelabFlake = homelab;
+            pkgs-unstable = darwinPkgsUnstable;
+            llm-agents-pkgs = llm-agents.packages.${darwinSystem};
+          };
         in
         {
           "${name}" = nix-darwin.lib.darwinSystem {
             system = "aarch64-darwin";
-            specialArgs = {
-              inherit username uid task_task;
-              pkgs-unstable = darwinPkgsUnstable;
-              llm-agents-pkgs = llm-agents.packages.${darwinSystem};
-            };
+            specialArgs = darwinSpecialArgs;
             modules = commonDarwinModules ++ privateModules;
           };
           "${name}-bootstrap" = nix-darwin.lib.darwinSystem {
             system = "aarch64-darwin";
-            specialArgs = {
-              inherit username uid task_task;
-              pkgs-unstable = darwinPkgsUnstable;
-              llm-agents-pkgs = llm-agents.packages.${darwinSystem};
-            };
+            specialArgs = darwinSpecialArgs;
             modules = commonDarwinModules;
           };
         };
