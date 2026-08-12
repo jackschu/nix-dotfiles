@@ -172,6 +172,7 @@
           commonDarwinModules = [
             sops-nix.darwinModules.sops
             ./nixos/nix_private_repos.nix
+            ./nixos/darwin_build_cluster.nix
             nix-homebrew.darwinModules.nix-homebrew
             {
               nix-homebrew = {
@@ -192,7 +193,6 @@
                 homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
               }
             )
-            ./nixos/darwin_build_cluster.nix
             ./nixos/darwin_configuration.nix
           ];
           # homelabFlake, not homelab: the module it carries owns the `homelab.*`

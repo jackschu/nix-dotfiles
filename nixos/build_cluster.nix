@@ -16,12 +16,23 @@
     mode = "0400";
   };
 
+  # Root-owned too: the watcher runs as root, because it reads every path in /nix/store.
+  sops.secrets.attic_push_token = {
+    key = "push_token";
+    sopsFile = "${homelabFlake}/secrets/attic-push.yaml";
+    owner = "root";
+    mode = "0400";
+  };
+
   homelab.buildCluster = {
     enable = true;
     builderSshKeyFile = config.sops.secrets.builder_ssh_key.path;
+    # These machines are no longer readers only: nix prefers the remote builder, but when it is down or
+    # busy they build locally, and nothing else would ever capture those paths.
+    pushTokenFile = config.sops.secrets.attic_push_token.path;
     # tier stays "trusted" — a claim about this host, not a performance knob, since
     # a client is root on the builder it dispatches to.
-    # pushTokenFile stays null: the bastion is the sole pusher.
+    # cacheHost stays the LAN address here; roaming hosts override it (see dev_thinkpad).
     # localMaxJobs stays null: local builds remain the normal path when off the LAN.
   };
 }
