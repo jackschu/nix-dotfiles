@@ -95,10 +95,11 @@ in
           });
 
           # GNU ELPA regenerates release tarballs, so the hash nixpkgs pinned
-          # for org-9.8.7 drifts. Pin the current upstream hash ourselves.
+          # for org drifts. Pin the current upstream hash ourselves; re-prefetch
+          # https://elpa.gnu.org/packages/org-<version>.tar whenever this mismatches.
           org = prev.org.overrideAttrs (old: {
             src = old.src.overrideAttrs (_: {
-              outputHash = "sha256-oF8gH3O9mj+SeiF1DJSlregspzEDlNO99f2h2dhwt2Y=";
+              outputHash = "sha256-nXdqYGrMVy/FrBaY38Eqw2H67vFkD5hGBJ8LKZ8q0Vg=";
             });
           });
         });
