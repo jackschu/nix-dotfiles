@@ -10,6 +10,9 @@ let
     ripgrep
     llm-agents-pkgs.claude-agent-acp
     tix.packages.${pkgs.stdenv.hostPlatform.system}.default
+    # Starlark LSP fallback + buildifier; buck2 itself comes from $PATH (see emacs-init.el)
+    starpls
+    bazel-buildtools
   ] ++ lib.optionals pkgs.stdenv.isLinux [
     # Linux needs explicit Swift toolchain/LSP; macOS gets sourcekit-lsp from Xcode.
     swift

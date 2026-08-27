@@ -586,3 +586,133 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
 
 ;; agent-shell
 (require 'agent-shell)
+
+;; ---------------------------------------------------------------------------
+;; buck2 / Starlark
+;; ---------------------------------------------------------------------------
+;; There is no starlark tree-sitter grammar in nixpkgs (and no Emacs mode that
+;; consumes one), but Starlark is a Python subset -- the python grammar parses
+;; BUCK files correctly, so python-ts-mode gives us real tree-sitter font-lock,
+;; indentation, imenu and structural navigation for free. buck-ts-mode exists so
+;; hooks, keys and the LSP clients have something buck-specific to hang off.
+;; Caveat of deriving: python-ts-mode-hook also runs in these buffers.
+
+(defun buck--project-root (&optional dir)
+  "Return the buck2 cell root at or above DIR (dir holding .buckconfig), or nil."
+  (when-let* ((found (locate-dominating-file (or dir default-directory) ".buckconfig")))
+    (expand-file-name found)))
+
+(defun buck--package-label ()
+  "Return this buffer's buck2 package label, e.g. \"//foo/bar:\"."
+  (when-let* ((file (buffer-file-name))
+              (dir (file-name-directory file))
+              (root (buck--project-root dir))
+              (rel (file-relative-name dir root)))
+    (concat "//" (if (member rel '("./" "." "")) "" (directory-file-name rel)) ":")))
+
+(defun buck--buildifier-type ()
+  "Best -type argument for buildifier on the current buffer."
+  (let ((name (file-name-nondirectory (or (buffer-file-name) ""))))
+    (cond ((string-match-p "\\.b[zx]l\\'" name) "bzl")
+          ((string-match-p "\\`\\(BUCK\\|TARGETS\\)" name) "build")
+          (t "default"))))
+
+(defun buck-format-buffer ()
+  "Format the current Starlark buffer with buildifier, preserving point."
+  (interactive)
+  (unless (executable-find "buildifier")
+    (user-error "buildifier not found on PATH"))
+  (let ((tmp (make-temp-file "buildifier" nil ".bzl"))
+        (errbuf (get-buffer-create "*buildifier*"))
+        (src (current-buffer)))
+    (unwind-protect
+        (progn
+          (write-region nil nil tmp nil 'silent)
+          (with-current-buffer errbuf (erase-buffer))
+          (if (zerop (call-process "buildifier" nil (list errbuf t) nil
+                                   "-type" (buck--buildifier-type) tmp))
+              (progn
+                (with-temp-buffer
+                  (insert-file-contents tmp)
+                  (let ((formatted (current-buffer)))
+                    (with-current-buffer src
+                      (replace-buffer-contents formatted))))
+                (message "buildifier: done"))
+            (display-buffer errbuf)))
+      (delete-file tmp))))
+
+(define-derived-mode buck-ts-mode python-ts-mode "Buck"
+  "Major mode for buck2 Starlark files (BUCK, TARGETS, *.bzl, *.bxl)."
+  ;; A BUCK file is mostly rule calls and kwargs, and both are level-4 features
+  ;; in python-ts-mode -- at the global default of 3 they render unhighlighted.
+  ;; Buffer-local, so nothing else changes. Drop to 3 if the bracket/operator
+  ;; faces that come along with it are too busy.
+  (setq-local treesit-font-lock-level 4)
+  (treesit-font-lock-recompute-features)
+  ;; M-x compile is pre-filled with the enclosing package.
+  (setq-local compile-command (concat "buck2 build " (or (buck--package-label) "")))
+  ;; Same treatment as swift-ts-mode: lsp-diagnostics-provider is :none globally,
+  ;; so opt this mode back in or the server's diagnostics never surface.
+  (setq-local lsp-diagnostics-provider :flymake)
+  (setq-local xref-prompt-for-identifier nil))
+
+;; C-c u is the format-buffer key everywhere else (clang-format); keep it here.
+(define-key buck-ts-mode-map (kbd "C-c u") #'buck-format-buffer)
+
+(dolist (entry '(("/BUCK\\(\\.v2\\)?\\'"    . buck-ts-mode)
+                 ("/TARGETS\\(\\.v2\\)?\\'" . buck-ts-mode)
+                 ("/PACKAGE\\(\\.v2\\)?\\'" . buck-ts-mode)
+                 ("\\.bzl\\'"               . buck-ts-mode)
+                 ("\\.bxl\\'"               . buck-ts-mode)
+                 ("/\\.buckconfig\\'"       . conf-mode)))
+  (add-to-list 'auto-mode-alist entry))
+
+(add-hook 'buck-ts-mode-hook #'lsp-deferred)
+
+;; So C-x C-f (helm-projectile-find-file) and M-/ root at the buck2 cell.
+(with-eval-after-load 'projectile
+  (add-to-list 'projectile-project-root-files ".buckconfig"))
+
+(defvar buck-prefer-starpls nil
+  "When non-nil, use starpls even inside a buck2 cell.
+The two servers trade off: buck2's LSP is cell-aware, so M-. resolves
+load(\"cell//path:f.bzl\") correctly and it knows the prelude, but it offers
+only definition/completion/hover.  starpls adds references, signature help and
+typechecking, but its builtins are Bazel's and it cannot resolve buck2 cells.
+Flip this if you want the richer server and can live without cell resolution.")
+
+(defun buck--use-buck2-lsp-p (filename mode)
+  "Non-nil when buck2's own LSP should serve FILENAME in MODE."
+  (and (not buck-prefer-starpls)
+       (provided-mode-derived-p mode 'buck-ts-mode)
+       (executable-find "buck2")
+       filename
+       (buck--project-root (file-name-directory filename))
+       t))
+
+;; lsp-mode starts *every* client whose activation matches, not just the
+;; highest-priority one (cf. the nil workaround above), so these two predicates
+;; are mutually exclusive: buck2's LSP inside a cell, starpls everywhere else.
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-language-id-configuration '(buck-ts-mode . "starlark"))
+
+  ;; Resolved at connect time rather than pinned by nix on purpose: we want the
+  ;; same buck2 the project uses, so the LSP shares its daemon.
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-stdio-connection
+                     (lambda () (list (or (executable-find "buck2") "buck2") "lsp")))
+    :major-modes '(buck-ts-mode)
+    :activation-fn #'buck--use-buck2-lsp-p
+    :server-id 'buck2-lsp
+    :priority 2))
+
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-stdio-connection '("starpls" "server"))
+    :major-modes '(buck-ts-mode)
+    :activation-fn (lambda (filename mode)
+                     (and (provided-mode-derived-p mode 'buck-ts-mode)
+                          (not (buck--use-buck2-lsp-p filename mode))))
+    :server-id 'starpls
+    :priority 1)))
