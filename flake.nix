@@ -217,6 +217,10 @@
           };
         };
 
+      mkEmacsPackage =
+        pkgs: pkgs-unstable:
+        (import ./config/emacs_package.nix { inherit pkgs pkgs-unstable; }).emacs;
+
       mkRefreshTixStubsApp = pkgs: {
         type = "app";
         program = toString (pkgs.writeShellScript "refresh_tix_stubs" ''
@@ -233,8 +237,16 @@
     in
     {
       packages = {
-        ${darwinSystem}.tix_stubs = tix.packages.${darwinSystem}.stubs;
-        ${linuxSystem}.tix_stubs = tix.packages.${linuxSystem}.stubs;
+        # emacs: the same package set the home configs use, minus the private
+        # runtime deps, so it evaluates without their inputs.
+        ${darwinSystem} = {
+          tix_stubs = tix.packages.${darwinSystem}.stubs;
+          emacs = mkEmacsPackage darwinPkgs darwinPkgsUnstable;
+        };
+        ${linuxSystem} = {
+          tix_stubs = tix.packages.${linuxSystem}.stubs;
+          emacs = mkEmacsPackage linuxPkgs linuxPkgsUnstable;
+        };
       };
 
       apps = {
