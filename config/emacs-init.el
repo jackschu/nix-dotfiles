@@ -654,6 +654,11 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
   ;; Same treatment as swift-ts-mode: lsp-diagnostics-provider is :none globally,
   ;; so opt this mode back in or the server's diagnostics never surface.
   (setq-local lsp-diagnostics-provider :flymake)
+  ;; ...but python-base-mode also installs python-flymake, which shells out to
+  ;; pyflakes. Starlark is not python and nothing here provides that checker, so
+  ;; it only ever warns "Cannot find a suitable checker" on every .bzl buffer.
+  ;; lsp-diagnostics-mode still adds its own backend once the server attaches.
+  (remove-hook 'flymake-diagnostic-functions 'python-flymake t)
   (setq-local xref-prompt-for-identifier nil))
 
 ;; C-c u is the format-buffer key everywhere else (clang-format); keep it here.
