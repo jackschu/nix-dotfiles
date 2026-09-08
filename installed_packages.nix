@@ -12,7 +12,9 @@ in {
   home = {
     common = [
       opencode_mcp_auth
-      llm-agents-pkgs.claude-code llm-agents-pkgs.claude-agent-acp llm-agents-pkgs.codex
+      llm-agents-pkgs.claude-code llm-agents-pkgs.claude-agent-acp
+      # Commented out: unused here, and the only source build in this set — a full rust compile every lock update.
+      # llm-agents-pkgs.codex
       task_task.packages.${pkgs.stdenv.hostPlatform.system}.default
       ripgrep tree yt-dlp
       # Fonts
