@@ -23,11 +23,15 @@ in
 #  networking.enableIPv6 = false;
 
   # Tailscale VPN
+  # extraSetFlags, not extraUpFlags: the latter only runs from tailscaled-autoconnect,
+  # which nixpkgs gates on an authKeyFile these machines don't have.
+  # useRoutingFeatures = "client" is what loosens rp_filter for subnet routes.
   services.tailscale = {
     enable = true;
-    extraUpFlags = [
-      "--accept-routes"
-      "--shields-up"
+    useRoutingFeatures = "client";
+    extraSetFlags = [
+      "--accept-routes=true"
+      "--shields-up=true"
     ];
   };
 

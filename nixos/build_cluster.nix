@@ -32,7 +32,8 @@
     pushTokenFile = config.sops.secrets.attic_push_token.path;
     # tier stays "trusted" — a claim about this host, not a performance knob, since
     # a client is root on the builder it dispatches to.
-    # cacheHost stays the LAN address here; roaming hosts override it (see dev_thinkpad).
+    # The LAN default would offer the push token to whatever answers on a foreign network.
+    cacheHost = "cache.taild3c1e.ts.net";
     # localMaxJobs stays null: local builds remain the normal path when off the LAN.
   };
 }
