@@ -20,6 +20,7 @@ let
     # Shared keys (can only decrypt shared secrets)
     shared = {
       tonks_macbook = "age1h44gh0x9k5lzea6lqwshzgtz27sjwg22ptj4uvl3uawzw60mkgvsm8wszh";
+      sophie_wsl = "age132a8df0rpjjdymsxltx9m2kzxvpkaew3tmtmryqgyurrua5n6ufs3vuz0a";
     };
   };
 

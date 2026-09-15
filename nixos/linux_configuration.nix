@@ -1,18 +1,14 @@
-{ config, lib, pkgs, pkgs-unstable, username, userDescription, llm-agents-pkgs, task_task, ... }:
+# Bare-metal Linux: bootloader, graphical session, and hardware services. Everything
+# a WSL guest can also use lives in linux_base.nix.
+{ config, lib, pkgs, pkgs-unstable, llm-agents-pkgs, task_task, ... }:
 
 let
   packages = import ../installed_packages.nix { inherit pkgs pkgs-unstable llm-agents-pkgs task_task; };
   isX86 = pkgs.stdenv.hostPlatform.isx86;
 in
 {
-  programs.nix-ld.enable = true;
-  programs.nix-ld.libraries = with pkgs; [
-    stdenv.cc.cc
-    zlib
-    openssl
-  ];
+  imports = [ ./linux_base.nix ];
 
-  imports = [ ./base_configuration.nix ];
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -21,33 +17,6 @@ in
   networking.networkmanager.enable = true;
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
 #  networking.enableIPv6 = false;
-
-  # Tailscale VPN
-  # extraSetFlags, not extraUpFlags: the latter only runs from tailscaled-autoconnect,
-  # which nixpkgs gates on an authKeyFile these machines don't have.
-  # useRoutingFeatures = "client" is what loosens rp_filter for subnet routes.
-  services.tailscale = {
-    enable = true;
-    useRoutingFeatures = "client";
-    extraSetFlags = [
-      "--accept-routes=true"
-      "--shields-up=true"
-    ];
-  };
-
-  # Locale
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
 
   # Display and desktop
   services.xserver.enable = true;
@@ -73,43 +42,6 @@ in
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
-  # User account
-  users.users.${username} = {
-    isNormalUser = true;
-    description = userDescription;
-    extraGroups = [ "networkmanager" "wheel" "docker" "kvm" ];
-    packages = packages.user.linux;
-  };
-
-  # Docker
-  virtualisation.docker = {
-    enable = true;
-    daemon.settings = {
-      runtimes = {
-        runsc = {
-          path = "${pkgs.gvisor}/bin/runsc";
-        };
-      };
-    };
-  };
-
-  # Linux-only system packages
-  environment.systemPackages = packages.system.linux;
-
-  # Garbage collection schedule (systemd timer)
-  nix.gc = {
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
-
-  # Shell
-  environment.interactiveShellInit = ''
-    export PATH="$HOME/.cargo/bin/:$PATH"
-  '';
   programs.steam.enable = isX86;
-  programs.bash.shellAliases = {
-    hg = "git";
-  };
   programs.xfconf.enable = true;
-  programs.npm.enable = true;
 }

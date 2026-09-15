@@ -100,15 +100,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1784665499,
-        "narHash": "sha256-9BMxlTxCCDAeoNLtb1a/st7udtTIJep+wpUzquA29VU=",
-        "owner": "nix-community",
+        "lastModified": 1788011267,
+        "narHash": "sha256-mEq2kU+ljompTToZ44Afvm7d/rHJ5iMBl0tjZuyShJs=",
+        "owner": "Mic92",
         "repo": "bun2nix",
-        "rev": "0f2a1f0b6f42cebe3b149bf62d38754c5e0e9729",
+        "rev": "5765b0614591f75ee8ba5596e81ae85c167d1071",
         "type": "github"
       },
       "original": {
-        "owner": "nix-community",
+        "owner": "Mic92",
+        "ref": "fix-structured-attrs-hook",
         "repo": "bun2nix",
         "type": "github"
       }
@@ -245,6 +246,22 @@
         "type": "github"
       }
     },
+    "flake-compat_2": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767039857,
+        "narHash": "sha256-vNpUSpF5Nuw8xvDLj2KCwwksIbjua2LZCqhV1LNRDns=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "5edf11c44bc78a0d334f6334cdaf7d60d732daab",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -276,11 +293,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785627969,
-        "narHash": "sha256-4dtXQk/NMePegK/nWp5NSeuZKLATItOq61lpEvmXqGw=",
+        "lastModified": 1787559586,
+        "narHash": "sha256-onL0VLf9vPllmT0H/OlURIU5r5t5WIEl7t4tVNKT0Nw=",
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "rev": "427bf4bd9435fdf21321c8cc628c24efc14c0f7a",
+        "rev": "9d0d87172c374f89da73c1cfe6d81ae62feac1f1",
         "type": "github"
       },
       "original": {
@@ -447,11 +464,11 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1787264870,
-        "narHash": "sha256-oQzC3yGwzoa3oDByyGWehxmr9dj1ioIc9pCAXBmz9FM=",
+        "lastModified": 1789681823,
+        "narHash": "sha256-kl1QE0nrZIS/Q3D3RLVptoSHWJsHPinZPDkOBH8bLmo=",
         "owner": "jackschu",
         "repo": "homelab",
-        "rev": "f1f9e8339477790021d62c2c826e067ac8a4ee59",
+        "rev": "ad67f8556c2d3fae09af7015959ea4e34e5b666c",
         "type": "github"
       },
       "original": {
@@ -532,11 +549,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1787252197,
-        "narHash": "sha256-6K9jl0sl257ppTU+RG1eVIwEtkx7KEPutae+CMNtAW4=",
+        "lastModified": 1788307555,
+        "narHash": "sha256-PKLtNDhFEGkjzktIKvXKqMDG4UKq/DFicyGlJwH4NJE=",
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "ab1f750326fab54710dcdbbf25cc1b37e2fc7347",
+        "rev": "775405507404a6c28246aec9a848e091d3d8478c",
         "type": "github"
       },
       "original": {
@@ -627,6 +644,28 @@
       "original": {
         "owner": "zhaofengli",
         "repo": "nix-homebrew",
+        "type": "github"
+      }
+    },
+    "nixos-wsl": {
+      "inputs": {
+        "flake-compat": "flake-compat",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789157919,
+        "narHash": "sha256-3+r8UDwPkTlB9hhHoN4rjGtZow3+wEFOganBKurhJhY=",
+        "owner": "nix-community",
+        "repo": "NixOS-WSL",
+        "rev": "b98199a76ab180be55f7a6a97bd4984a87c99964",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "ref": "release-26.05",
+        "repo": "NixOS-WSL",
         "type": "github"
       }
     },
@@ -841,6 +880,7 @@
         "llm-agents": "llm-agents_3",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
+        "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-unstable": "nixpkgs-unstable_3",
         "plasma-manager": "plasma-manager",
@@ -1024,7 +1064,7 @@
     "tix": {
       "inputs": {
         "crane": "crane",
-        "flake-compat": "flake-compat",
+        "flake-compat": "flake-compat_2",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager_2",
         "nixpkgs": "nixpkgs_6",

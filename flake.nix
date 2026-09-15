@@ -31,6 +31,10 @@
       url = "github:getsentry/homebrew-xcodebuildmcp";
       flake = false;
     };
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -73,6 +77,7 @@
       homebrew-core,
       homebrew-cask,
       homebrew-getsentry-xcodebuildmcp,
+      nixos-wsl,
       plasma-manager,
       agent-runtime,
       llm-agents,
@@ -128,6 +133,8 @@
           name,
           username,
           userDescription,
+          # The bare-metal stack; WSL guests swap in ./nixos/wsl_configuration.nix.
+          baseModule ? ./nixos/linux_configuration.nix,
           privateModules ? [ ],
         }:
         let
@@ -135,7 +142,7 @@
             sops-nix.nixosModules.sops
             ./nixos/nix_private_repos.nix
             ./nixos/build_cluster.nix
-            ./nixos/linux_configuration.nix
+            baseModule
             ./nixos/${name}
           ];
           # homelabFlake, not homelab: the module it carries owns the `homelab.*`
@@ -143,6 +150,7 @@
           nixosSpecialArgs = {
             inherit username userDescription task_task;
             homelabFlake = homelab;
+            nixosWslFlake = nixos-wsl;
             pkgs-unstable = linuxPkgsUnstable;
             llm-agents-pkgs = llm-agents.packages.${linuxSystem};
           };
@@ -274,6 +282,19 @@
         modules = linuxBaseModules ++ [ ./config/desktop.nix ];
       };
 
+      homeConfigurations."sophie_wsl" = home-manager.lib.homeManagerConfiguration {
+        pkgs = linuxPkgs;
+        extraSpecialArgs = {
+          pkgs-unstable = linuxPkgsUnstable;
+          llm-agents-pkgs = llm-agents.packages.${linuxSystem};
+          # TODO: replace with Sophie's own git identity before the first switch.
+          gitName = "sophie";
+          gitEmail = "sophie@example.com";
+          inherit tix task_task;
+        };
+        modules = commonModules ++ [ ./config/sophie_wsl.nix ];
+      };
+
       homeConfigurations."jack_macbook" = home-manager.lib.homeManagerConfiguration {
         pkgs = darwinPkgs;
         extraSpecialArgs = {
@@ -319,6 +340,12 @@
             agent-runtime.nixosModules.host
             ./nixos/dev_thinkpad/agent-runtime.nix
           ];
+        })
+        // (mkNixos {
+          name = "sophie_wsl";
+          username = "sophie";
+          userDescription = "Sophie";
+          baseModule = ./nixos/wsl_configuration.nix;
         })
         // (mkNixos {
           name = "desktop";
