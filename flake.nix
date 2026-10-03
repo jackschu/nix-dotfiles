@@ -57,7 +57,7 @@
       url = "github:modem-dev/hunk";
     };
     homelab = {
-      url = "github:jackschu/homelab";
+      url = "github:meetcassette/single?dir=infra/homelab";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

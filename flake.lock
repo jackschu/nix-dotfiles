@@ -448,16 +448,18 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1790336214,
-        "narHash": "sha256-FB3msdzG3DUdLaZgA+PjYetZhQGTGiurSzD6jebZgeU=",
-        "owner": "jackschu",
-        "repo": "homelab",
-        "rev": "c96f0c5b70e901048e437a091488354b1ec0fd61",
+        "dir": "infra/homelab",
+        "lastModified": 1791068979,
+        "narHash": "sha256-+1WyYdvJ95HDfSYn0ijUvjcAA2xZ602olbByhuZ4InA=",
+        "owner": "meetcassette",
+        "repo": "single",
+        "rev": "3c01335b745a654ccd01771e87f8b5aeb495e439",
         "type": "github"
       },
       "original": {
-        "owner": "jackschu",
-        "repo": "homelab",
+        "dir": "infra/homelab",
+        "owner": "meetcassette",
+        "repo": "single",
         "type": "github"
       }
     },
