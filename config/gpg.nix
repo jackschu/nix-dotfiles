@@ -24,17 +24,17 @@ in
       sopsFile = ../secrets/private.yaml;
     };
 
-    # Git commit signing (only when GPG is enabled)
+    # Commit signing is off; the key is still declared so the import below can
+    # check for it and so signing can be flipped back on in one place.
     programs.git.signing.key = "2A0AF30A3BD43ABB";
-    programs.git.settings.commit.gpgsign = true;
+    programs.git.settings.commit.gpgsign = false;
 
-    # Jujutsu commit signing
     programs.jujutsu.settings.signing = {
       backend = "gpg";
-      behavior = "own";
+      behavior = "drop";
       key = "2A0AF30A3BD43ABB";
     };
-    programs.jujutsu.settings.git.sign-on-push = true;
+    programs.jujutsu.settings.git.sign-on-push = false;
 
     # Import GPG key from sops secret after decryption
     home.activation.importGpgKey = lib.hm.dag.entryAfter [ "sops-nix" ] ''

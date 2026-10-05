@@ -449,11 +449,11 @@
       },
       "locked": {
         "dir": "infra/homelab",
-        "lastModified": 1791068979,
-        "narHash": "sha256-+1WyYdvJ95HDfSYn0ijUvjcAA2xZ602olbByhuZ4InA=",
+        "lastModified": 1791207822,
+        "narHash": "sha256-CUFcepRCaCLYL1/uZvOaCAhjcLEc5HaVZVHSWZI6YBk=",
         "owner": "meetcassette",
         "repo": "single",
-        "rev": "3c01335b745a654ccd01771e87f8b5aeb495e439",
+        "rev": "e82bf218cdb9376fd22d6468213d0b364f2129cc",
         "type": "github"
       },
       "original": {
