@@ -51,6 +51,11 @@ let
 
   emacsPackage = pkgs.emacs-nox;
 
+  initText = builtins.readFile ./emacs-init.el + ''
+
+    (add-to-list 'treesit-extra-load-path "${tree-sitter-swift-grammar}/lib")
+  '';
+
   extraPackages = epkgs:
       let
         patchedEpkgs = epkgs.overrideScope (_final: prev: {
@@ -174,8 +179,10 @@ in
   # must place this at ~/.emacs-custom.el or startup errors.
   customFile = ./emacs-custom.el;
 
-  initText = builtins.readFile ./emacs-init.el + ''
+  inherit initText;
 
-    (add-to-list 'treesit-extra-load-path "${tree-sitter-swift-grammar}/lib")
-  '';
+  # For machines without home-manager: customize reads the repo copy, so saving fails instead of drifting.
+  standaloneInit = pkgs.writeText "emacs_init.el" (''
+    (setq custom-file "${./emacs-custom.el}")
+  '' + initText);
 }

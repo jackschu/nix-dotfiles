@@ -2,7 +2,8 @@
 ;; Point customize to a writable file outside the Nix store.
 ;; This file is seeded from config/emacs-custom.el on every home-manager switch.
 ;; After using customize, run sync-emacs-custom to persist changes back to the repo.
-(setq custom-file "~/.emacs-custom.el")
+;; emacs_init (see emacs_package.nix) presets the read-only repo copy instead.
+(unless custom-file (setq custom-file "~/.emacs-custom.el"))
 (load custom-file)
 
 (advice-add 'custom-save-all :after
