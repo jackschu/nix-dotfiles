@@ -143,7 +143,7 @@ let
 
         # JS/TS
         prettier-js
-        pkgs-unstable.emacsPackages.ws-butler
+        ws-butler
 
         # AI / agent-shell
         agent-shell
