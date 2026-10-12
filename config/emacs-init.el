@@ -660,6 +660,8 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
   ;; it only ever warns "Cannot find a suitable checker" on every .bzl buffer.
   ;; lsp-diagnostics-mode still adds its own backend once the server attaches.
   (remove-hook 'flymake-diagnostic-functions 'python-flymake t)
+  ;; In a buck2 cell without buck2 on PATH no server matches; that is intended, so no warning.
+  (setq-local lsp-warn-no-matched-clients nil)
   (setq-local xref-prompt-for-identifier nil))
 
 ;; C-c u is the format-buffer key everywhere else (clang-format); keep it here.
@@ -681,11 +683,8 @@ Used in `my-org-clocktable-formatter' to go from net times back to tatal times."
 
 (defvar buck-prefer-starpls nil
   "When non-nil, use starpls even inside a buck2 cell.
-The two servers trade off: buck2's LSP is cell-aware, so M-. resolves
-load(\"cell//path:f.bzl\") correctly and it knows the prelude, but it offers
-only definition/completion/hover.  starpls adds references, signature help and
-typechecking, but its builtins are Bazel's and it cannot resolve buck2 cells.
-Flip this if you want the richer server and can live without cell resolution.")
+starpls is a Bazel server: buck2's inline type annotations are syntax errors
+to it, its builtins are Bazel's and it cannot resolve buck2 cells.")
 
 (defun buck--use-buck2-lsp-p (filename mode)
   "Non-nil when buck2's own LSP should serve FILENAME in MODE."
@@ -698,7 +697,7 @@ Flip this if you want the richer server and can live without cell resolution.")
 
 ;; lsp-mode starts *every* client whose activation matches, not just the
 ;; highest-priority one (cf. the nil workaround above), so these two predicates
-;; are mutually exclusive: buck2's LSP inside a cell, starpls everywhere else.
+;; are mutually exclusive: buck2's LSP inside a cell, starpls outside any cell.
 (with-eval-after-load 'lsp-mode
   (add-to-list 'lsp-language-id-configuration '(buck-ts-mode . "starlark"))
 
@@ -719,6 +718,8 @@ Flip this if you want the richer server and can live without cell resolution.")
     :major-modes '(buck-ts-mode)
     :activation-fn (lambda (filename mode)
                      (and (provided-mode-derived-p mode 'buck-ts-mode)
-                          (not (buck--use-buck2-lsp-p filename mode))))
+                          (or buck-prefer-starpls
+                              (not (and filename
+                                        (buck--project-root (file-name-directory filename)))))))
     :server-id 'starpls
     :priority 1)))
