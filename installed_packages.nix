@@ -24,7 +24,8 @@ in {
       jujutsu
     ];
     linux = [ wl-clipboard kdePackages.kdbusaddons ] ++ lib.optionals isX86 [
-      zoom-us discord spotify
+      # discord from unstable: 26.05's 1.0.159 hardcodes OpenH264 2.5.1, breaking stream decoding (error 2012); fixed in 1.0.168
+      zoom-us pkgs-unstable.discord spotify
     ];
   };
 

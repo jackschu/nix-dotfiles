@@ -108,6 +108,7 @@
       };
       linuxPkgsUnstable = import nixpkgs-unstable {
         system = linuxSystem;
+        config.allowUnfree = true;
       };
       darwinPkgsUnstable = import nixpkgs-unstable {
         system = darwinSystem;

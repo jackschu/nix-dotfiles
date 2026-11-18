@@ -48,6 +48,7 @@
       "inputs": {
         "herd2": "herd2",
         "nixpkgs": "nixpkgs_3",
+        "nixpkgs-runner": "nixpkgs-runner",
         "rust-overlay": "rust-overlay"
       },
       "locked": {
@@ -468,6 +469,30 @@
         "type": "github"
       }
     },
+    "fenix_2": {
+      "inputs": {
+        "nixpkgs": [
+          "homelab",
+          "runners",
+          "herd2",
+          "nixpkgs"
+        ],
+        "rust-analyzer-src": "rust-analyzer-src_2"
+      },
+      "locked": {
+        "lastModified": 1786606848,
+        "narHash": "sha256-RS78j/7iFHjIMzTr9bS3PypjvPozHBfdR5xBJ+ABXXA=",
+        "owner": "nix-community",
+        "repo": "fenix",
+        "rev": "3df888be63045c349a6d322f0214f1346bb18be9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "fenix",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -716,6 +741,24 @@
         "homelab"
       ]
     },
+    "herd2_2": {
+      "inputs": {
+        "fenix": "fenix_2",
+        "nixpkgs": "nixpkgs_10"
+      },
+      "locked": {
+        "path": "../herd2",
+        "type": "path"
+      },
+      "original": {
+        "path": "../herd2",
+        "type": "path"
+      },
+      "parent": [
+        "homelab",
+        "runners"
+      ]
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -911,15 +954,16 @@
           "nixpkgs"
         ],
         "nixpkgs-unstable": "nixpkgs-unstable_4",
+        "runners": "runners",
         "sops-nix": "sops-nix_2"
       },
       "locked": {
         "dir": "infra/homelab",
-        "lastModified": 1794882351,
-        "narHash": "sha256-1DTlzYd2MrrVH1i1VSVpRsL0hc+BU8iecEtYYDhM3Qw=",
+        "lastModified": 1795034642,
+        "narHash": "sha256-0z22COCJpx1jIdr1GsuDyVHXnAATzJAQca4herKxkjc=",
         "owner": "meetcassette",
         "repo": "single",
-        "rev": "253170d08c31064938634e1b4fd0f6bb718b0de7",
+        "rev": "2d3d6df534603eba0317bb075c98027f30f9dbc3",
         "type": "github"
       },
       "original": {
@@ -952,7 +996,7 @@
     "hunk_2": {
       "inputs": {
         "bun2nix": "bun2nix_6",
-        "nixpkgs": "nixpkgs_10",
+        "nixpkgs": "nixpkgs_12",
         "systems": "systems_7"
       },
       "locked": {
@@ -1334,6 +1378,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-runner": {
+      "locked": {
+        "lastModified": 1794756927,
+        "narHash": "sha256-IfuPcOpwC+bYvBdtUhA9hHhY7xV7k9T5LeOTZFiJB4o=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b349185bb79c7cf7ad8ea8c097931730bf473c71",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-26.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1794872590,
@@ -1448,6 +1508,38 @@
     },
     "nixpkgs_10": {
       "locked": {
+        "lastModified": 1786599213,
+        "narHash": "sha256-yNJd40f11EzXBjSByCB7IPpeFFAdeoSKKM67dGkfFoU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0e251e24a4f24e036a084b6b4b2d2491af4167f4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_11": {
+      "locked": {
+        "lastModified": 1786201459,
+        "narHash": "sha256-CiOTEjmwAmG2AWnaIno9YaCJJmpca2FXPhMAsnrolCg=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "8b8c811c7c2541c30382c5de7ed26be055569c60",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-26.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_12": {
+      "locked": {
         "lastModified": 1777954456,
         "narHash": "sha256-hGdgeU2Nk87RAuZyYjyDjFL6LK7dAZN5RE9+hrDTkDU=",
         "owner": "NixOS",
@@ -1462,7 +1554,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_11": {
+    "nixpkgs_13": {
       "locked": {
         "lastModified": 1794872590,
         "narHash": "sha256-E+XLAfnC7+bdr4qlEgRv6cdGmiqTU5oeFNKCha7epqQ=",
@@ -1478,7 +1570,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_12": {
+    "nixpkgs_14": {
       "locked": {
         "lastModified": 1772479524,
         "narHash": "sha256-u7nCaNiMjqvKpE+uZz9hE7pgXXTmm5yvdtFaqzSzUQI=",
@@ -1494,7 +1586,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_13": {
+    "nixpkgs_15": {
       "locked": {
         "lastModified": 1775036866,
         "narHash": "sha256-ZojAnPuCdy657PbTq5V0Y+AHKhZAIwSIT2cb8UgAz/U=",
@@ -1714,7 +1806,7 @@
         "llm-agents": "llm-agents_5",
         "nix-darwin": "nix-darwin_2",
         "nix-homebrew": "nix-homebrew_2",
-        "nixpkgs": "nixpkgs_11",
+        "nixpkgs": "nixpkgs_13",
         "nixpkgs-unstable": "nixpkgs-unstable_5",
         "org-elpa": "org-elpa",
         "plasma-manager": "plasma-manager_2",
@@ -1723,7 +1815,41 @@
         "tix": "tix_2"
       }
     },
+    "runners": {
+      "inputs": {
+        "herd2": "herd2_2",
+        "nixpkgs": "nixpkgs_11"
+      },
+      "locked": {
+        "path": "../../runners",
+        "type": "path"
+      },
+      "original": {
+        "path": "../../runners",
+        "type": "path"
+      },
+      "parent": [
+        "homelab"
+      ]
+    },
     "rust-analyzer-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786530578,
+        "narHash": "sha256-fCOcC64H7e0EIlIHTCsl5FQ9CW4S6VK3OLn1ugWR9zI=",
+        "owner": "rust-lang",
+        "repo": "rust-analyzer",
+        "rev": "068bb508581477a5e3f753e1e206d34288dfa9c9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rust-lang",
+        "ref": "nightly",
+        "repo": "rust-analyzer",
+        "type": "github"
+      }
+    },
+    "rust-analyzer-src_2": {
       "flake": false,
       "locked": {
         "lastModified": 1786530578,
@@ -2058,7 +2184,7 @@
     },
     "task_task_2": {
       "inputs": {
-        "nixpkgs": "nixpkgs_12"
+        "nixpkgs": "nixpkgs_14"
       },
       "locked": {
         "lastModified": 1773804730,
@@ -2103,7 +2229,7 @@
         "flake-compat": "flake-compat_2",
         "flake-utils": "flake-utils_2",
         "home-manager": "home-manager_4",
-        "nixpkgs": "nixpkgs_13",
+        "nixpkgs": "nixpkgs_15",
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
