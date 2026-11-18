@@ -82,7 +82,7 @@ let
           # https://elpa.gnu.org/packages/org-<version>.tar whenever this mismatches.
           org = prev.org.overrideAttrs (old: {
             src = old.src.overrideAttrs (_: {
-              outputHash = "sha256-nXdqYGrMVy/FrBaY38Eqw2H67vFkD5hGBJ8LKZ8q0Vg=";
+              outputHash = "sha256-iQqd1cTx0nn27Qs9EGcNeWqsy3/ccaKmZc0VO+xGPx0=";
             });
           });
         });
