@@ -1638,6 +1638,19 @@
         "type": "github"
       }
     },
+    "org-elpa": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788167546,
+        "narHash": "sha256-NGXEAOE5E59YLeT+K1e3Gr2zK1GcAilBli4CDYO/6oU=",
+        "type": "tarball",
+        "url": "https://elpa.gnu.org/packages/org-9.8.10.tar"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://elpa.gnu.org/packages/org-9.8.10.tar"
+      }
+    },
     "plasma-manager": {
       "inputs": {
         "home-manager": [
@@ -1703,6 +1716,7 @@
         "nix-homebrew": "nix-homebrew_2",
         "nixpkgs": "nixpkgs_11",
         "nixpkgs-unstable": "nixpkgs-unstable_5",
+        "org-elpa": "org-elpa",
         "plasma-manager": "plasma-manager_2",
         "sops-nix": "sops-nix_3",
         "task_task": "task_task_2",

@@ -47,6 +47,13 @@
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # GNU ELPA regenerates release tarballs, so nixpkgs' pinned org hash drifts.
+    # Pin it here instead; bump the version in the URL to match nixpkgs' org
+    # (emacs_package.nix asserts they agree), then: nix flake update org-elpa
+    org-elpa = {
+      url = "https://elpa.gnu.org/packages/org-9.8.10.tar";
+      flake = false;
+    };
     tix = {
       url = "github:JRMurr/tix";
     };
@@ -77,6 +84,7 @@
       agent-runtime,
       llm-agents,
       emacs-overlay,
+      org-elpa,
       tix,
       task_task,
       hunk,
@@ -219,11 +227,11 @@
 
       mkEmacsPackage =
         pkgs: pkgs-unstable:
-        (import ./config/emacs_package.nix { inherit pkgs pkgs-unstable; }).emacs;
+        (import ./config/emacs_package.nix { inherit pkgs pkgs-unstable; orgSrc = org-elpa; }).emacs;
 
       mkEmacsInit =
         pkgs: pkgs-unstable:
-        (import ./config/emacs_package.nix { inherit pkgs pkgs-unstable; }).standaloneInit;
+        (import ./config/emacs_package.nix { inherit pkgs pkgs-unstable; orgSrc = org-elpa; }).standaloneInit;
 
       mkRefreshTixStubsApp = pkgs: {
         type = "app";
@@ -266,7 +274,7 @@
         extraSpecialArgs = {
           pkgs-unstable = linuxPkgsUnstable;
           llm-agents-pkgs = llm-agents.packages.${linuxSystem};
-          inherit tix task_task;
+          inherit tix task_task org-elpa;
         };
         modules = linuxBaseModules ++ [ ./config/laptop.nix ];
       };
@@ -276,7 +284,7 @@
         extraSpecialArgs = {
           pkgs-unstable = linuxPkgsUnstable;
           llm-agents-pkgs = llm-agents.packages.${linuxSystem};
-          inherit tix task_task;
+          inherit tix task_task org-elpa;
         };
         modules = linuxBaseModules ++ [ ./config/desktop.nix ];
       };
@@ -287,7 +295,7 @@
           pkgs-unstable = darwinPkgsUnstable;
           llm-agents-pkgs = llm-agents.packages.${darwinSystem};
           username = "jackschumann";
-          inherit tix task_task;
+          inherit tix task_task org-elpa;
         };
         modules = commonModules ++ [ ./config/darwin.nix ];
       };
@@ -300,7 +308,7 @@
           username = "williamtonks";
           gitName = "williamrntonks";
           gitEmail = "245291231+williamrntonks@users.noreply.github.com";
-          inherit tix task_task;
+          inherit tix task_task org-elpa;
         };
         modules = commonModules ++ [ ./config/darwin.nix ./config/tonks_macbook.nix ];
       };

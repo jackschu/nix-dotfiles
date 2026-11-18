@@ -1,9 +1,10 @@
-{ pkgs, pkgs-unstable, llm-agents-pkgs, tix, lib, config, ... }:
+{ pkgs, pkgs-unstable, llm-agents-pkgs, tix, org-elpa, lib, config, ... }:
 let
   tix_stubs_path = "${config.xdg.dataHome}/tix/stubs";
 
   emacsPkg = import ./emacs_package.nix {
     inherit pkgs pkgs-unstable lib;
+    orgSrc = org-elpa;
     agentTools = llm-agents-pkgs;
     tixPkg = tix.packages.${pkgs.stdenv.hostPlatform.system}.default;
   };

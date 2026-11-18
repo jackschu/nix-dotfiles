@@ -3,6 +3,7 @@
 { pkgs
 , pkgs-unstable
 , lib ? pkgs.lib
+, orgSrc              # org-elpa flake input: the unpacked GNU ELPA org tarball
 , agentTools ? null   # llm-agents-pkgs; null omits claude-agent-acp
 , tixPkg ? null       # tix package;      null omits tix
 }:
@@ -78,13 +79,23 @@ let
           });
 
           # GNU ELPA regenerates release tarballs, so the hash nixpkgs pinned
-          # for org drifts. Pin the current upstream hash ourselves; re-prefetch
-          # https://elpa.gnu.org/packages/org-<version>.tar whenever this mismatches.
-          org = prev.org.overrideAttrs (old: {
-            src = old.src.overrideAttrs (_: {
-              outputHash = "sha256-iQqd1cTx0nn27Qs9EGcNeWqsy3/ccaKmZc0VO+xGPx0=";
+          # for org drifts. Build from the org-elpa flake input instead, which
+          # keeps the hash in flake.lock; see its comment in flake.nix to bump.
+          org =
+            let
+              srcVersion = builtins.head (builtins.match ''.*\(define-package "org" "([^"]+)".*''
+                (builtins.readFile "${orgSrc}/org-pkg.el"));
+            in
+            assert lib.assertMsg (srcVersion == prev.org.version)
+              "org-elpa input is ${srcVersion} but nixpkgs has ${prev.org.version}; update the org-elpa URL in flake.nix and run: nix flake update org-elpa";
+            prev.org.overrideAttrs (_: {
+              # elpaBuild only installs from a .tar, but flake inputs arrive unpacked.
+              src = pkgs.runCommand "org-${srcVersion}.tar" { } ''
+                tar -C ${orgSrc} -cf $out --sort=name --mtime=@1 --owner=0 --group=0 --numeric-owner --mode=u+w \
+                  --transform 's,^\.,org-${srcVersion},' .
+              '';
+              version = srcVersion;
             });
-          });
         });
       in
       with patchedEpkgs; [
