@@ -61,7 +61,6 @@
      "[/\\\\]\\result" "[/\\\\]\\result-bin" "[/\\\\]\\.direnv\\'"))
  '(lsp-file-watch-threshold 2000)
  '(lsp-rust-analyzer-cargo-extra-args [])
- '(lsp-rust-analyzer-cargo-extra-env [])
  '(lsp-rust-analyzer-cargo-override-command [])
  '(lsp-rust-analyzer-cargo-watch-enable t)
  '(lsp-rust-analyzer-rustfmt-extra-args ["--config" "max_width=120"])
