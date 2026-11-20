@@ -146,6 +146,7 @@ let
         company-terraform
         jinja2-mode
         capnp-mode
+        jsonnet-mode
 
         # Python
         blacken
