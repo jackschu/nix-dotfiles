@@ -72,6 +72,9 @@ in
       sopsRekey
     ];
 
+    # Plain sops finds the key on every machine, including macOS where its default is under ~/Library
+    home.sessionVariables.SOPS_AGE_KEY_FILE = ageKeyFile;
+
     # Ensure the age key directory exists
     xdg.configFile."${sopsAgeRelPath}/.keep".text = "";
 
